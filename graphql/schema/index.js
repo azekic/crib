@@ -28,6 +28,12 @@ type User {
     createdPosts: [Post!]
 }
 
+type AuthData {
+    userId: ID!
+    token: String!
+    tokenExpiration: Int!
+}
+
 input PostInput {
     title: String!
     body: String!
@@ -47,6 +53,7 @@ input CommentInput {
 type RootQuery {
     posts: [Post!]!
     comments: [Comment!]!
+    login(email: String!, password: String!): AuthData!
 }
 
 type RootMutation {

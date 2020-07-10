@@ -15,10 +15,13 @@ module.exports = {
         }
     },
 
-    addComment: async args => {
+    addComment: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
         const fetchedPost = await Post.findOne({_id: args.commentInput.postId});
         const comment = new Comment({
-            user: '5efdeabc49d99f564c9d9fa1',
+            user: req.userId,
             post: fetchedPost,
             text: args.commentInput.text
         });

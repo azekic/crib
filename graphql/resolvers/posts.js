@@ -14,18 +14,21 @@ module.exports = {
             throw err;
         }
     },
-    createPost: async args => {
+    createPost: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
         const post = new Post({
             title: args.postInput.title,
             body: args.postInput.body,
             votes: args.postInput.votes,
-            author: '5efdeabc49d99f564c9d9fa1'
+            author: req.userId
         });
         let createdPost;
         try {
             const result = await post.save();
             createdPost = transformPost(result);
-            const author = await User.findById('5efdeabc49d99f564c9d9fa1');
+            const author = await User.findById(req.userId);
             if (!author) {
                 throw new Error("Author not found");
             }
