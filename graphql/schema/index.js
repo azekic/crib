@@ -37,7 +37,6 @@ type AuthData {
 input PostInput {
     title: String!
     body: String!
-    votes: Int!
 }
 
 input UserInput {

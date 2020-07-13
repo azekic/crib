@@ -21,7 +21,6 @@ module.exports = {
         const post = new Post({
             title: args.postInput.title,
             body: args.postInput.body,
-            votes: args.postInput.votes,
             author: req.userId
         });
         let createdPost;

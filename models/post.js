@@ -13,7 +13,8 @@ const postSchema = new Schema({
     },
     votes: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     author: {
         type: Schema.Types.ObjectId,
