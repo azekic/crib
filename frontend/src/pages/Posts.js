@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Modal from '../components/Modal/Modal';
 import Backdrop from '../components/Backdrop/Backdrop';
+import PostList from '../components/Posts/PostList/PostList';
 import AuthContext from '../context/auth-context';
 import './Posts.css';
 
@@ -124,10 +125,6 @@ class PostsPage extends Component {
     }
 
     render() {
-        const postList = this.state.posts.map(post => {
-        return <li key={post._id} className="posts__list-item">{post.title}</li>;
-        });
-
         return (
             <React.Fragment>
                 {this.state.creating && <Backdrop />}
@@ -149,9 +146,7 @@ class PostsPage extends Component {
                 <button className="btn" onClick={this.startCreatePostHandler}>Create Post</button>
             </div>
             }
-            <ul className="posts__list">
-                {postList}
-            </ul>
+            <PostList posts={this.state.posts}/>
             </React.Fragment>
         );
     }
