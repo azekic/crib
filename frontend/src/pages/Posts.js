@@ -5,7 +5,7 @@ import './Posts.css';
 import { NoFragmentCyclesRule } from 'graphql';
 class PostsPage extends Component {
     state = {
-        creating: NoFragmentCyclesRule
+        creating: false
     };
 
     startCreateEventHandler = () => {
