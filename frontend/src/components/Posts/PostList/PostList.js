@@ -5,9 +5,20 @@ import PostItem from './PostItem/PostItem';
 const postList = props => {
     const posts = props.posts.map(post => {
         return (
-            <PostItem key={post._id} postId={post._id} title={post.title} />
-            );
-        });
+            <PostItem 
+                key={post._id} 
+                postId={post._id} 
+                title={post.title} 
+                votes={post.votes}
+                body={post.body}
+                createdAt={post.createdAt}
+                userId={props.authUserId}
+                authorId={post.author._id}
+                onDetail={props.onViewDetail}
+                comments={post.comments}
+            />
+        );
+    });
     return (
     <ul className="post__list">
         {posts}
@@ -15,4 +26,4 @@ const postList = props => {
     );
 };
 
-export default postList;;
+export default postList;

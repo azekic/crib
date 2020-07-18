@@ -4,6 +4,21 @@ const User = require('../../models/user');
 
 module.exports = {
 
+/*     users: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
+        try {
+            const users = await User.find();
+            return users.map(user => {
+                return {
+                    ...user._doc, password: null
+                };
+            });
+        } catch (err) {
+            throw err;
+        }
+    }, */
 
     createUser: async args => {
         try {

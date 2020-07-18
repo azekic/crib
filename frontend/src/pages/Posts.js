@@ -3,12 +3,15 @@ import Modal from '../components/Modal/Modal';
 import Backdrop from '../components/Backdrop/Backdrop';
 import PostList from '../components/Posts/PostList/PostList';
 import AuthContext from '../context/auth-context';
+import Spinner from '../components/Spinner/Spinner';
 import './Posts.css';
 
 class PostsPage extends Component {
     state = {
         creating: false,
-        posts: []
+        posts: [],
+        isLoading: false,
+        selectedPost: null
     };
 
     static contextType = AuthContext;
@@ -48,10 +51,6 @@ class PostsPage extends Component {
                         body
                         votes
                         createdAt
-                        author {
-                            _id
-                            email
-                        }
                     }
                 }
             `
@@ -72,7 +71,20 @@ class PostsPage extends Component {
             return res.json();
         })
         .then(resData => {
-            this.fetchPosts();
+            this.setState(prevState => {
+                const updatedPosts = [...prevState.posts];
+                updatedPosts.push({
+                    _id: resData.data.createPost._id,
+                    title: resData.data.createPost.title,
+                    body: resData.data.createPost.body,
+                    votes: resData.data.createPost.votes,
+                    createdAt: resData.data.createPost.createdAt,
+                    author: {
+                        _id: this.context.userId
+                    }
+                });
+                return {posts: updatedPosts};
+            })
         })
         .catch(err => {
             console.log(err);
@@ -80,10 +92,11 @@ class PostsPage extends Component {
     };
 
     modalCancelHandler = () => {
-        this.setState({creating: false});
+        this.setState({creating: false, selectedPost: null});
     };
 
     fetchPosts() {
+        this.setState({isLoading: true})
         const requestBody = {
             query: `
                 query {
@@ -97,11 +110,15 @@ class PostsPage extends Component {
                             _id
                             email
                         }
+                        comments {
+                            _id
+                            text
+                            createdAt
+                        }
                     }
                 }
             `
         };  
-        const token = this.context.token;
 
         fetch('http://localhost:8000/graphql', {
             method: 'POST',
@@ -117,36 +134,75 @@ class PostsPage extends Component {
         })
         .then(resData => {
             const posts = resData.data.posts;
-            this.setState({posts: posts});
+            this.setState({posts: posts, isLoading: false});
         })
         .catch(err => {
             console.log(err);
+            this.setState({isLoading: false});
         });
     }
+
+    showDetailHandler = postId => {
+        this.setState(prevState => {
+            const selectedPost = prevState.posts.find(p => p._id === postId);
+            return {selectedPost: selectedPost};
+        })
+    }
+
 
     render() {
         return (
             <React.Fragment>
-                {this.state.creating && <Backdrop />}
-                {this.state.creating && <Modal title="Add Post" canCancel canConfirm onCancel={this.modalCancelHandler} onConfirm={this.modalConfirmHandler}>
-                <form>
-                    <div className="form-control">
-                        <label htmlFor="title">Title</label>
-                        <input type="text" id="title" ref={this.titleElRef}></input>
-                    </div>
-                    <div className="form-control">
-                        <label htmlFor="body">Body</label>
-                        <textarea id="body" rows="4" ref={this.bodyElRef}></textarea>
-                    </div>
-                </form>
-                </Modal>}
+                {(this.state.creating || this.state.selectedPost) && <Backdrop />}
+                {this.state.creating && 
+                <Modal 
+                    title="Add Post" 
+                    canCancel 
+                    canConfirm 
+                    onCancel={this.modalCancelHandler} 
+                    onConfirm={this.modalConfirmHandler}
+                    confirmText="Confirm"
+                >
+                    <form>
+                        <div className="form-control">
+                            <label htmlFor="title">Title</label>
+                            <input type="text" id="title" ref={this.titleElRef}></input>
+                        </div>
+                        <div className="form-control">
+                            <label htmlFor="body">Body</label>
+                            <textarea id="body" rows="4" ref={this.bodyElRef}></textarea>
+                        </div>
+                    </form>
+                </Modal>
+                }
+                {this.state.selectedPost && 
+                <Modal 
+                    title={this.state.selectedPost.title} 
+                    canCancel 
+                    canConfirm 
+                    onCancel={this.modalCancelHandler} 
+                    confirmText="Add Comment"
+                >
+                    <h1>{this.state.selectedPost.title}</h1>
+                    <h2>{this.state.selectedPost.votes} likes - {new Date(this.state.selectedPost.createdAt).toLocaleDateString()}</h2>
+                    <p>{this.state.selectedPost.body}</p>
+                </Modal>
+                }
             {this.context.token && 
             <div className="posts-control">
                 <p>Share what you're thinking about.</p>
                 <button className="btn" onClick={this.startCreatePostHandler}>Create Post</button>
             </div>
             }
-            <PostList posts={this.state.posts}/>
+            {this.state.isLoading ? 
+             <Spinner /> : 
+                <PostList 
+                posts={this.state.posts} 
+                authUserId={this.context.userId}
+                onViewDetail={this.showDetailHandler}
+            />
+            }
+
             </React.Fragment>
         );
     }

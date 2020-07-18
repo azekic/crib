@@ -20,12 +20,23 @@ module.exports = {
             throw new Error('Unauthenticated!');
         }
         const fetchedPost = await Post.findOne({_id: args.commentInput.postId});
+        if (!fetchedPost) {
+            throw new Error("Post not found");
+        }
         const comment = new Comment({
             user: req.userId,
             post: fetchedPost,
             text: args.commentInput.text
         });
-        const result = await comment.save();
-        return transformComment(result);
+        try {
+            fetchedPost.comments.push(comment);
+            await fetchedPost.save();
+            const result = await comment.save();
+            return transformComment(result);
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 }
