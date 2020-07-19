@@ -1,7 +1,17 @@
+const DataLoader = require('dataloader');
+
 const Post = require('../../models/post');
 const User = require('../../models/user');
 const Comment = require('../../models/comment');
 const { dateToString } = require('../../helpers/date');
+
+const postLoader = new DataLoader((postIds) => {
+    return posts(postIds);
+});
+
+const userLoader = new DataLoader((userIds) => {
+    return User.find({_id: {$in: userIds}});
+});
 
 const posts = async postIds => {
     try {
@@ -25,8 +35,8 @@ const comments = async commentIds => {
 
 const singlePost = async postId => {
     try {
-        const post = await Post.findById(postId);
-        return transformPost(post);
+        const post = await postLoader.load(postId.toString());
+        return post;
     } catch (err) {
             throw err;
         }
@@ -34,10 +44,10 @@ const singlePost = async postId => {
 
 const user = async userId => {
     try {
-        const user = await User.findById(userId);
+        const user = await userLoader.load(userId.toString());
         return {
             ...user._doc,
-            createdPosts: posts.bind(this, user._doc.createdPosts)
+            createdPosts: postLoader.load.bind(this, user._doc.createdPosts)
         }
     } catch (err) {
         throw err;
