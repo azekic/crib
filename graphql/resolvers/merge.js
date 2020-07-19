@@ -47,7 +47,7 @@ const user = async userId => {
         const user = await userLoader.load(userId.toString());
         return {
             ...user._doc,
-            createdPosts: postLoader.load.bind(this, user._doc.createdPosts)
+            createdPosts: () => postLoader.loadMany(user._doc.createdPosts)
         }
     } catch (err) {
         throw err;
