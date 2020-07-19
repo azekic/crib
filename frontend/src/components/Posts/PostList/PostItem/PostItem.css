@@ -1,8 +1,11 @@
 .posts__list-item {
     margin: 1rem 0;
     padding: 1rem;
-    border: 1px solid #5101d1;
+    border: 1px solid rgba(0, 0, 0, 0.9);
+    border-radius: 5px;
     align-items: center;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.26);
+    background-color: #ffffff;
 }
 
 .posts__list-item__top {
@@ -18,7 +21,7 @@
 .posts__list-item h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #5101d1
+    color: #5101d1;
 }
 
 .posts__list-item h2 {

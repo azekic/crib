@@ -15,7 +15,9 @@ const posts = async postIds => {
 const comments = async commentIds => {
     try {
         const comments = await Comment.find({ _id: { $in: commentIds } });
-        return comments;
+        return comments.map(comment => {
+            return transformComment(comment);
+        });
     } catch (err) {
         throw err;
     }
@@ -50,7 +52,7 @@ const transformPost = post => {
         author: user.bind(this, post.author),
         comments: comments.bind(this, post._doc.comments)
     };
-}
+};
 
 const transformComment = comment => {
     return { 

@@ -114,6 +114,10 @@ class PostsPage extends Component {
                             _id
                             text
                             createdAt
+                            user {
+                                _id
+                                email
+                            }
                         }
                     }
                 }

@@ -16,47 +16,6 @@ class PostItem extends Component {
     };
     static contextType = AuthContext;
 
-/*     componentDidMount() {
-        this.fetchComments();
-    }
-
-    fetchComments() {
-        this.setState({isLoading: true})
-
-        const requestBody = {
-            query: `
-                query {
-                    comments {
-                        _id
-                        text
-                        createdAt
-                    }
-                }
-            `
-        };  
-
-        fetch('http://localhost:8000/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(res => {
-            if (res.status !== 200 && res.status !== 201) {
-                throw new Error('Failed!');
-            }
-            return res.json();
-        })
-        .then(resData => {
-            const comments = resData.data.comments;
-            this.setState({comments: comments, isLoading: false});
-        })
-        .catch(err => {
-            console.log(err);
-            this.setState({isLoading: false});
-        });
-    } */
-
     addCommentHandler = () => {
         const requestBody = {
             query: `
@@ -66,6 +25,10 @@ class PostItem extends Component {
                         text
                         createdAt
                         updatedAt
+                        user {
+                            _id
+                            email
+                        }
                     }
                 }
             `
@@ -92,7 +55,8 @@ class PostItem extends Component {
                 updatedComments.push({
                     _id: resData.data.addComment._id,
                     text: resData.data.addComment.text,
-                    createdAt: resData.data.addComment.createdAt
+                    createdAt: resData.data.addComment.createdAt,
+                    user: resData.data.addComment.user
                 });
                 this.textElRef.current.value = "";
                 return {comments: updatedComments};
@@ -104,6 +68,47 @@ class PostItem extends Component {
         });
 
     }
+
+    deleteCommentHandler = commentId => {
+        const requestBody = {
+            query: `
+                mutation {
+                    deleteComment(commentId: "${commentId}") {
+                        _id
+                        title
+                    }
+                }
+            `
+        };
+
+        const token = this.context.token;
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed!');
+            }
+            return res.json();
+        })
+        .then(resData => {
+            this.setState(prevState => {
+                const updatedComments = prevState.comments.filter(comment => {
+                    return comment._id !== commentId;
+                });
+                return {comments: updatedComments};
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     render () {
         return (
     <li key={this.props.postId} className="posts__list-item">
@@ -126,6 +131,7 @@ class PostItem extends Component {
              <Spinner /> : 
              <CommentList 
                 comments={this.state.comments}
+                deleteCommentHandler={this.deleteCommentHandler}
             />
             }
             

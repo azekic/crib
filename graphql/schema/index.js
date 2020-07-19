@@ -60,6 +60,7 @@ type RootMutation {
     createPost(postInput: PostInput): Post
     createUser(userInput: UserInput): User
     addComment(commentInput: CommentInput): Comment!
+    deleteComment(commentId: ID!): Post!
 }
 
 schema {

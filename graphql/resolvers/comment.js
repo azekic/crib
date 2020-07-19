@@ -1,6 +1,6 @@
 const Post = require('../../models/post');
 const Comment = require('../../models/comment');
-const { transformComment } = require('./merge');
+const { transformComment, transformPost } = require('./merge');
 
 module.exports = {
 
@@ -9,7 +9,7 @@ module.exports = {
             const comments = await Comment.find();
             return comments.map(comment => {
                 return transformComment(comment);
-            })
+            });
         } catch (err) {
             throw err;
         }
@@ -36,6 +36,19 @@ module.exports = {
         }
         catch (err) {
             console.log(err);
+            throw err;
+        }
+    },
+    deleteComment: async (args, req) => {
+        if(!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
+        try {
+            const comment = await Comment.findById(args.commentId).populate('post');
+            const post = transformPost(comment.post);
+            await Comment.deleteOne({ _id: args.commentId });
+            return post;
+        } catch (err) {
             throw err;
         }
     }

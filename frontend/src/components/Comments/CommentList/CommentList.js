@@ -1,25 +1,32 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import CommentItem from './CommentItem/CommentItem';
-
+import AuthContext from '../../../context/auth-context';
 import './CommentList.css'
-const commentList = props => {
-    const comments = props.comments.map(comment => {
-        return (
-            <CommentItem 
-                key={comment._id}
-                commentId={comment._id}
-                text={comment.text}
-            />
-        );
-    });
+class CommentList extends Component {
 
-    return (
-        <ul className="comment__list">
-            {comments}
-        </ul>
-    );
+    constructor(props) {
+        super(props);
+    };
     
+    render () {
+        const comments = this.props.comments.map(comment => {
+            return (
+                <CommentItem 
+                    key={comment._id}
+                    commentId={comment._id}
+                    text={comment.text}
+                    user={comment.user}
+                    onDelete={this.props.deleteCommentHandler}
+                />
+            );
+        });
+        return (
+            <ul className="comment__list">
+                {comments}
+            </ul>
+        )
+    };
 }
 
-export default commentList;
+export default CommentList;
