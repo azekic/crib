@@ -16,7 +16,11 @@ const userSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Post'
         }
-    ]
+    ],
+    unit: {
+        type: Schema.Types.ObjectId,
+        ref: 'Unit'
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);

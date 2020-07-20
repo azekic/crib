@@ -39,8 +39,7 @@ body {
     background: #6219d6;
     border-color: #6219d6;
 }
-.action-control {
-    text-align: center;
+.container {
     border: 1px solid rgba(0, 0, 0, 0.9);
     border-radius: 5px;
     padding: 1rem;
@@ -49,4 +48,18 @@ body {
     max-width: 90%;
     background-color: #ffffff;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.26);
+}
+
+.action-control {
+    text-align: center;
+}
+
+.list-item {
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border: 1px solid #5101d1;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

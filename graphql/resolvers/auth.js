@@ -15,8 +15,7 @@ module.exports = {
                 .hash(args.userInput.password, 12);
             const user = new User({
                 email: args.userInput.email,
-                password: hashedPassword,
-                unit: unitNumber
+                password: hashedPassword
             })
             const result = await user.save();
             return { ...result._doc, password: null };

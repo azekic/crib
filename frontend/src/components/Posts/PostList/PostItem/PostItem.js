@@ -123,7 +123,7 @@ class PostItem extends Component {
                 <button className="btn" onClick={props.onDetail.bind(this, props.postId)}>Show more</button>
             </div> */}
         </div>
-        {this.props.comments !== null && (
+        {this.props.comments != null && (
         <div className="posts_list-item__comments">
             
             <h2>Comments</h2>

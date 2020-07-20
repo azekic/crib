@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from '../components/Modal/Modal';
 import Backdrop from '../components/Backdrop/Backdrop';
 import BuildingList from '../components/Buildings/BuildingList/BuildingList';
+import Unit from '../components/Unit/Unit';
 import AuthContext from '../context/auth-context';
 import Spinner from '../components/Spinner/Spinner';
 
@@ -10,7 +11,10 @@ class AccountPage extends Component {
     state = {
         creating: false,
         buildings: [],
-        selectedBuilding: null
+        selectedBuilding: null,
+        unit: null,
+        isLoading: true,
+        isLoadingBuildings: true
     }
 
     static contextType = AuthContext;
@@ -24,6 +28,7 @@ class AccountPage extends Component {
 
     componentDidMount() {
         this.fetchBuildings();
+        this.fetchUnit();
     }
 
     startAddBuildingHandler = () => {
@@ -93,7 +98,7 @@ class AccountPage extends Component {
     };
 
     fetchBuildings() {
-        this.setState({isLoading: true})
+        this.setState({isLoadingBuildings: true})
         const requestBody = {
             query: `
                 query {
@@ -111,7 +116,7 @@ class AccountPage extends Component {
             method: 'POST',
             body: JSON.stringify(requestBody),
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             }
         }).then(res => {
             if (res.status !== 200 && res.status !== 201) {
@@ -121,13 +126,57 @@ class AccountPage extends Component {
         })
         .then(resData => {
             const buildings = resData.data.buildings;
-            this.setState({buildings: buildings, isLoading: false});
+            this.setState({buildings: buildings, isLoadingBuildings: false});
+        })
+        .catch(err => {
+            console.log(err);
+            this.setState({isLoadingBuildings: false});
+        });
+    }
+
+    fetchUnit() {
+        this.setState({isLoading: true})
+        const requestBody = {
+            query: `
+                query {
+                    unit {
+                        _id
+                        unitNumber
+                        building {
+                            _id
+                            address
+                            city
+                            province
+                        }
+                    }
+                }
+            `
+        };  
+        const token = this.context.token;
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token
+            }
+        }).then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed!');
+            }
+            return res.json();
+        })
+        .then(resData => {
+            const unit = resData.data.unit;
+            this.setState({unit: unit, isLoading: false});
         })
         .catch(err => {
             console.log(err);
             this.setState({isLoading: false});
         });
     }
+
     render() {
         return (
             <React.Fragment>
@@ -171,17 +220,30 @@ class AccountPage extends Component {
                     </form>
                 </Modal>
                 }
-                {this.context.token && 
-                <div className="action-control">
-                    <p>Add a new building</p>
-                    <button className="btn" onClick={this.startAddBuildingHandler}>Add building</button>
-                </div>
-                }
                 {this.state.isLoading ? 
                 <Spinner /> : 
+                <React.Fragment>
+                    <div className="container">
+                        <h2>General</h2>
+                        <Unit 
+                            unit={this.state.unit} 
+                        />
+                    </div>
+                    </React.Fragment>
+
+                }
+                {this.context.token && 
+                <div className="container action-control">
+                    <h2>Choose a buliding</h2>
+                    {this.state.isLoadingBuildings ? 
+                    <Spinner /> : 
                     <BuildingList 
-                    buildings={this.state.buildings} 
-                />
+                            buildings={this.state.buildings} 
+                        />
+                        
+                    }
+                    <button className="btn" onClick={this.startAddBuildingHandler}>Add new building</button>
+                </div>
                 }
             </React.Fragment>
         )

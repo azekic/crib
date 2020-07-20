@@ -40,6 +40,15 @@ const comments = async commentIds => {
     }
 };
 
+const singleBuilding = async buildingId => {
+    try {
+        const building = await buildingLoader.load(buildingId.toString());
+        return building;
+    } catch (err) {
+            throw err;
+        }
+};
+
 const singlePost = async postId => {
     try {
         const post = await postLoader.load(postId.toString());
@@ -81,8 +90,17 @@ const transformComment = comment => {
      };
 };
 
+const transformUnit = unit => {
+    return { 
+        ...unit._doc, 
+        building: singleBuilding.bind(this, unit._doc.building._id),
+        occupant: user.bind(this, unit._doc.occupant)
+     };
+};
+
 exports.transformComment = transformComment;
 exports.transformPost = transformPost;
+exports.transformUnit = transformUnit;
 
 //exports.user = user;
 //exports.posts = posts;

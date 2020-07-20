@@ -81,6 +81,7 @@ type RootQuery {
     comments: [Comment!]!
     buildings: [Building!]!
     login(email: String!, password: String!): AuthData!
+    unit: Unit
 }
 
 type RootMutation {
