@@ -3,6 +3,9 @@ const DataLoader = require('dataloader');
 const Post = require('../../models/post');
 const User = require('../../models/user');
 const Comment = require('../../models/comment');
+const Unit = require('../../models/unit');
+const Building = require('../../models/building');
+
 const { dateToString } = require('../../helpers/date');
 
 const postLoader = new DataLoader((postIds) => {
@@ -11,6 +14,10 @@ const postLoader = new DataLoader((postIds) => {
 
 const userLoader = new DataLoader((userIds) => {
     return User.find({_id: {$in: userIds}});
+});
+
+const buildingLoader = new DataLoader((buildingIds) => {
+    return Building.find({_id: {$in: buildingIds}});
 });
 
 const posts = async postIds => {

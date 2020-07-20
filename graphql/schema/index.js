@@ -27,6 +27,21 @@ type User {
     email: String!
     password: String
     createdPosts: [Post!]
+    unit: Unit
+}
+
+type Building {
+    _id: ID!
+    address: String!
+    city: String!
+    province: String!
+}
+ 
+type Unit {
+    _id: ID!
+    unitNumber: Int!
+    building: Building!
+    occupant: User
 }
 
 type AuthData {
@@ -45,6 +60,17 @@ input UserInput {
     password: String!
 }
 
+input UnitInput {
+    buildingId: ID!
+    unitNumber: Int!
+}
+
+input BuildingInput{
+    address: String!
+    city: String!
+    province: String!
+}
+
 input CommentInput {
     postId: ID!
     text: String!
@@ -53,12 +79,15 @@ input CommentInput {
 type RootQuery {
     posts: [Post!]!
     comments: [Comment!]!
+    buildings: [Building!]!
     login(email: String!, password: String!): AuthData!
 }
 
 type RootMutation {
     createPost(postInput: PostInput): Post
     createUser(userInput: UserInput): User
+    addUnit(unitInput: UnitInput): Unit!
+    addBuilding(buildingInput: BuildingInput): Building
     addComment(commentInput: CommentInput): Comment!
     deleteComment(commentId: ID!): Post!
 }

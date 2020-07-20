@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import AuthPage from './pages/Auth';
-import CommentsPage from './pages/Comments';
+import AccountPage from './pages/Account';
 import PostsPage from './pages/Posts';
 import MainNavigation from './components/Navigation/MainNavigation';
 import AuthContext from './context/auth-context';
@@ -45,7 +45,10 @@ class App extends Component {
               <Route path = "/auth" component = {AuthPage} /> 
               )}
               {this.state.token && (
-                <Route path = "/posts" component = {PostsPage} />
+                <React.Fragment>
+                  <Route path = "/posts" component = {PostsPage} />
+                  <Route path = "/account" component = {AccountPage} />
+                </React.Fragment>
                 )}
               {!this.state.token && <Redirect to="/auth" exact />}
               </Switch>

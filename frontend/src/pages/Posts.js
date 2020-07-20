@@ -193,7 +193,7 @@ class PostsPage extends Component {
                 </Modal>
                 }
             {this.context.token && 
-            <div className="posts-control">
+            <div className="action-control">
                 <p>Share what you're thinking about.</p>
                 <button className="btn" onClick={this.startCreatePostHandler}>Create Post</button>
             </div>
