@@ -14,7 +14,18 @@ type PostProps = {
 }
 const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: PostProps) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
-
+  const [likeButtonStyle, setLikeButtonStyle] = useState({color: "medium", text: "Like"});
+  const [likesCount, setLikesCount] = useState(likes);
+  const toggleLikeHandler = () => {
+    if (likeButtonStyle.text == "Like") {
+      setLikeButtonStyle({color: "primary", text: "Liked"});
+      setLikesCount(likesCount + 1);
+    }
+    else {
+      setLikeButtonStyle({color: "medium", text: "Like"});
+      setLikesCount(likesCount - 1);
+    }
+  };
   return (
     <IonCard>
       <IonCardHeader className="ion-no-padding">
@@ -73,7 +84,7 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
         <p className="ion-float-end">...see more</p>
       </IonCardContent>
       <IonItem lines="none">
-        <IonBadge color="light" class="ion-margin-end">{likes} Likes</IonBadge>
+        <IonBadge color="light" class="ion-margin-end">{likesCount} Likes</IonBadge>
         <IonBadge color="light">{comments} Comments</IonBadge>
       </IonItem>
       <IonItem>
@@ -82,15 +93,15 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
             <IonCol>
               <IonButton
                 className="ion-float-left"
-                color="medium"
+                color={likeButtonStyle.color}
                 fill="clear"
                 expand="full"
                 onClick={ () => {
-                  console.log('like clicked');
+                  toggleLikeHandler();
                 }}
               >
                 <IonIcon slot="start" icon={thumbsUp} />
-                <div>Like</div>
+                <div>{likeButtonStyle.text}</div>
               </IonButton>
             </IonCol>
             <IonCol>
