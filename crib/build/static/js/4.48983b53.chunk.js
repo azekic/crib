@@ -1,2 +1,0 @@
-(this["webpackJsonpcondo-chat"]=this["webpackJsonpcondo-chat"]||[]).push([[4],{166:function(n,t,o){"use strict";o.r(t),o.d(t,"startStatusTap",(function(){return c}));var e=o(17),c=function(){var n=window;n.addEventListener("statusTap",(function(){Object(e.f)((function(){var t=n.innerWidth,o=n.innerHeight,c=document.elementFromPoint(t/2,o/2);if(c){var i=c.closest("ion-content");i&&i.componentOnReady().then((function(){Object(e.n)((function(){return i.scrollToTop(300)}))}))}}))}))}}}]);
-//# sourceMappingURL=4.48983b53.chunk.js.map
