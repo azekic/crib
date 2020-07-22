@@ -1,1 +1,25 @@
 node_modules
+
+# dependencies
+condo-crib/node_modules
+condo-crib/.pnp
+condo-crib/.pnp.js
+
+# testing
+condo-crib/coverage
+
+# production
+condo-crib/build
+condo-crib/ios
+
+# misc
+condo-crib/.DS_Store
+condo-crib/.env.local
+condo-crib/.env.development.local
+condo-crib/.env.test.local
+condo-crib/.env.production.local
+condo-crib/.vscode
+
+condo-crib/npm-debug.log*
+condo-crib/yarn-debug.log*
+condo-crib/yarn-error.log*

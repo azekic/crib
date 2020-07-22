@@ -44,8 +44,12 @@ module.exports = {
         });
 
         const fetchedUser = await User.findOne({_id: req.userId});
+        const prevUnit = fetchedUser.unit;
 
         try {
+            if (prevUnit) {
+                await Unit.findByIdAndDelete({_id: prevUnit._id});
+            }
             fetchedUser.unit = unit;
             await fetchedUser.save();
             const result = await unit.save();

@@ -7,8 +7,6 @@ import PostsPage from './pages/Posts';
 import MainNavigation from './components/Navigation/MainNavigation';
 import AuthContext from './context/auth-context';
 
-import './App.css';
-
 class App extends Component {
   state = {
     token: null,

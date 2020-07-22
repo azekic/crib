@@ -10,8 +10,8 @@ import Spinner from '../components/Spinner/Spinner';
 class AccountPage extends Component {
     state = {
         creating: false,
+        addingUnit: false,
         buildings: [],
-        selectedBuilding: null,
         unit: null,
         isLoading: true,
         isLoadingBuildings: true
@@ -24,6 +24,7 @@ class AccountPage extends Component {
         this.addressElRef = React.createRef();
         this.cityElRef = React.createRef();
         this.provinceElRef = React.createRef();
+        this.unitNumberElRef = React.createRef();
     }
 
     componentDidMount() {
@@ -35,6 +36,58 @@ class AccountPage extends Component {
         this.setState({creating: true});
     }
 
+    startAddUnitHandler = () => {
+        this.setState({addingUnit: true});
+    }
+    unitConfirmHandler = () => {
+        this.setState({addingUnit: false, isLoading: true});
+        const unitNumber = +this.unitNumberElRef.current.value;
+        const buildingId = this.state.unit.building._id
+
+        if (unitNumber <= 0 || buildingId == null){
+            return;
+        }
+
+        const requestBody = {
+            query: `
+                mutation {
+                    addUnit(unitInput: {unitNumber: ${unitNumber}, buildingId: "${buildingId}"}) {
+                        _id
+                        unitNumber
+                        building {
+                            _id
+                            address
+                            city
+                            province
+                        }
+                    }
+                }
+            `
+        };  
+        const token = this.context.token;
+
+        fetch('http://localhost:8000/graphql', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token
+            }
+        }).then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed!');
+            }
+            return res.json();
+        })
+        .then(resData => {
+            const unit = resData.data.addUnit;
+            this.setState({unit: unit, isLoading: false})
+        })
+        .catch(err => {
+            console.log(err);
+            this.setState({isLoading: false})
+        });
+    }
     modalConfirmHandler = () => {
         this.setState({creating: false});
         const address = this.addressElRef.current.value;
@@ -83,7 +136,6 @@ class AccountPage extends Component {
                 const updatedBuildings = [...prevState.buildings];
                 updatedBuildings.push(updatedBuilding);
                 return{
-                    selectedBuilding: updatedBuilding,
                     buildings: updatedBuildings
                 }
             });
@@ -220,6 +272,24 @@ class AccountPage extends Component {
                     </form>
                 </Modal>
                 }
+                {(this.state.addingUnit) && <Backdrop />}
+                {this.state.addingUnit && 
+                <Modal
+                    title="Add your unit"
+                    canCancel
+                    canConfirm
+                    onCancel={this.modalCancelHandler}
+                    onConfirm={this.unitConfirmHandler}
+                    confirmText="Add"
+                >
+                    <form>
+                        <div className="form-control">
+                            <label htmlFor="unitNumber">Unit Number</label>
+                            <input type="number" id="unitNumber" ref={this.unitNumberElRef}></input>
+                        </div>
+                    </form>
+                </Modal>
+                }
                 {this.state.isLoading ? 
                 <Spinner /> : 
                 <React.Fragment>
@@ -232,9 +302,13 @@ class AccountPage extends Component {
                     </React.Fragment>
 
                 }
+                <div className="container action-control">
+                    <h2>Enter your unit number</h2>
+                    <button className="btn" onClick={this.startAddUnitHandler}>Add unit</button>
+                </div>
                 {this.context.token && 
                 <div className="container action-control">
-                    <h2>Choose a buliding</h2>
+                    <h2>Choose a building</h2>
                     {this.state.isLoadingBuildings ? 
                     <Spinner /> : 
                     <BuildingList 
