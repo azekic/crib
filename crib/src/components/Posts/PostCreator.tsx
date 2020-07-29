@@ -8,8 +8,9 @@ type PostProps = {
     name: string,
     unit: string,
     profilePicture: string
+    onSubmitAction: React.Dispatch<React.SetStateAction<boolean>>
 }
-const PostCreator = ({ name, unit, profilePicture }: PostProps) => {
+const PostCreator = ({ name, unit, profilePicture, onSubmitAction }: PostProps) => {
     const [text, setText] = useState<string>();
     return (
         <React.Fragment>
@@ -60,7 +61,7 @@ const PostCreator = ({ name, unit, profilePicture }: PostProps) => {
             <IonButton
                 className="ion-float-right"
                 fill="clear"
-                onClick={() => console.log("send clicked")}
+                onClick={() => onSubmitAction(false)}
             >
                 <IonIcon slot="icon-only" icon={send} />
             </IonButton>

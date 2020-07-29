@@ -5,15 +5,18 @@ import PostList from '../components/Posts/PostList/PostList';
 import PostCreator from '../components/Posts/PostCreator';
 
 const Home: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
   return (
     <IonPage>
-      <IonModal isOpen={showModal}>
+      <IonModal 
+        isOpen={showCreatePostModal}
+        onDidDismiss={() => setShowCreatePostModal(false)}
+      >
         <IonHeader translucent>
           <IonToolbar>
             <IonButtons slot="primary">
-              <IonButton onClick={() => setShowModal(false)}>
+              <IonButton onClick={() => setShowCreatePostModal(false)}>
                 <IonIcon slot="icon-only" icon={close} />
               </IonButton>
             </IonButtons>
@@ -25,7 +28,9 @@ const Home: React.FC = () => {
           <PostCreator
             name="Andre Zekic"
             unit="221"
-            profilePicture="https://media-exp1.licdn.com/dms/image/C4E03AQEZDUl98iycDA/profile-displayphoto-shrink_400_400/0?e=1600905600&v=beta&t=16_fkwR_k1JGW3Z21F99tIs9WO0f8fmK0Iei6ZAxh3k" />
+            profilePicture="https://media-exp1.licdn.com/dms/image/C4E03AQEZDUl98iycDA/profile-displayphoto-shrink_400_400/0?e=1600905600&v=beta&t=16_fkwR_k1JGW3Z21F99tIs9WO0f8fmK0Iei6ZAxh3k" 
+            onSubmitAction={setShowCreatePostModal}
+          />
         </IonContent>
       </IonModal>
       <IonContent>
@@ -33,7 +38,7 @@ const Home: React.FC = () => {
           <IonRow>
             <IonCol>
               <IonCard>
-                <IonButton onClick={() => setShowModal(true)} className="ion-float-left" color="medium" fill="clear" expand="full">
+                <IonButton onClick={() => setShowCreatePostModal(true)} className="ion-float-left" color="medium" fill="clear" expand="full">
                   <IonIcon slot="start" icon={create} />
                   <div>Create a post</div>
                 </IonButton>

@@ -42,6 +42,8 @@ import '@ionic/react/css/display.css';
 import './theme/variables.scss';
 import News from './pages/News';
 import MyCondo from './pages/MyCondo';
+import EditUser from './pages/EditUser';
+import ChangeBuilding from './pages/ChangeBuilding';
 
 const App = () => {
 
@@ -69,7 +71,7 @@ const App = () => {
 
   return (
     <IonApp>
-      <IonHeader id="desktop-ion-header">
+      <IonHeader>
         <IonToolbar>
           <IonButtons slot="primary">
             <IonButton href="/messages">
@@ -87,6 +89,8 @@ const App = () => {
             <Route path="/mycondo" component={MyCondo} exact={true} />
             <Route path="/account" component={Account} exact={true} />
             <Route path="/messages" component={Messages} exact={true} />
+            <Route path="/account/edit" component={EditUser} exact={true}/>
+            <Route path="/account/edit/building" component={ChangeBuilding} exact={true}/>
             <Route path="/" render={() => <Redirect to="/home" />} exact={true} />
           </IonRouterOutlet>
           <IonTabBar slot={tabsState.tabsPlacement} className={tabsState.tabsStyle}>
