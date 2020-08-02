@@ -1,0 +1,8 @@
+.show-more-link {
+    color: var(--ion-text-color);
+}
+.show-more-link:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--ion-color-primary);
+}

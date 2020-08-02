@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonBadge, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea, IonList, IonAvatar } from '@ionic/react';
 import { thumbsUp, chatboxEllipses, ellipsisHorizontal, share, trash, close, bookmark, send, arrowBack } from 'ionicons/icons';
 import UserAvatar from '../../../UserAvatar';
-
+import Truncate from 'react-truncate';
+import './PostItem.css';
 type PostProps = {
   name: string,
   unit: string,
@@ -21,6 +22,7 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
     text: "Like",
     likeCount: likes
   });
+  const [truncated, handleTruncate] = useState(true);
 
   // eslint-disable-next-line
   const [commentText, setCommentText] = useState<string>();
@@ -217,9 +219,10 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
         {image && <img width="100%" src={image} alt="Post" />}
         <IonCardContent>
           <IonText color="dark">
-            {text}
+          <Truncate lines={truncated && 4} ellipsis={<span> <a onClick={() => handleTruncate(false)} className='show-more-link'>...show more</a></span>}>
+              {text}
+            </Truncate>
           </IonText>
-          <p className="ion-float-end">...see more</p>
         </IonCardContent>
         <IonItem lines="none">
           <IonButton disabled color="dark" fill="clear" class="ion-margin-end">

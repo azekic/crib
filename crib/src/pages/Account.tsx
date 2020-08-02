@@ -1,6 +1,7 @@
 import React from 'react';
 import { IonContent, IonPage, IonCard, IonList, IonItem, IonLabel, IonCardHeader, IonCardTitle, IonIcon, IonButton, IonToggle, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { moon } from 'ionicons/icons';
+import './Account.css';
 
 const toggleDarkModeHandler = () => {
   document.body.classList.toggle("dark");
@@ -65,8 +66,10 @@ const Account: React.FC = () => {
                     <IonToggle slot="end" onIonChange={toggleDarkModeHandler} />
                   </IonItem>
                 </IonList>
-
               </IonCard>
+                <IonButton className="margin-horizontal" expand="block">
+                  Log out
+                </IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
