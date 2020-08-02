@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonBadge, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea } from '@ionic/react';
-import { thumbsUp, chatboxEllipses, ellipsisHorizontal, share, trash, close, bookmark, send } from 'ionicons/icons';
+import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonBadge, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea, IonList, IonAvatar } from '@ionic/react';
+import { thumbsUp, chatboxEllipses, ellipsisHorizontal, share, trash, close, bookmark, send, arrowBack } from 'ionicons/icons';
 import UserAvatar from '../../../UserAvatar';
 
 type PostProps = {
@@ -14,6 +14,7 @@ type PostProps = {
 }
 const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: PostProps) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
+  const [addCommentModal, setAddCommentModal] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [likeButtonValues, setLikeButtonValues] = useState({
     color: "medium",
@@ -40,14 +41,102 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
 
   return (
     <React.Fragment>
-      <IonModal 
+
+      <IonModal
         isOpen={showCommentsModal}
         onDidDismiss={() => setShowCommentsModal(false)}
       >
         <IonHeader translucent>
           <IonToolbar>
-            <IonButtons slot="primary">
+            <IonButtons slot="start">
               <IonButton onClick={() => setShowCommentsModal(false)}>
+                <IonIcon icon={arrowBack} />
+              </IonButton>
+            </IonButtons>
+            <IonButtons slot="end">
+              <IonButton
+                onClick={() => setShowActionSheet(true)}
+                className="ion-float-right ion-margin"
+                color="medium"
+                fill="clear"
+                expand="full"
+                shape="round"
+                size="small"
+              >
+                <IonIcon icon={ellipsisHorizontal} />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+          <IonItem lines="none">
+            <UserAvatar profilePicture={profilePicture} unit={unit} name={name} />
+          </IonItem>
+        </IonHeader>
+        <IonContent fullscreen>
+          <IonItem lines="none">
+            <IonText color="dark" className="ion-padding-top">
+              {text}
+            </IonText>
+          </IonItem>
+          <IonItem lines="none">
+            <IonButton disabled color="dark" fill="clear" class="ion-margin-end">
+              <IonIcon slot="start" icon={thumbsUp} />
+              {likeButtonValues.likeCount}
+            </IonButton>
+            <IonButton
+              disabled
+              color="dark"
+              fill="clear"
+            >
+              {comments} Comments
+          </IonButton>
+          </IonItem>
+          <IonList>
+            <IonItem lines="none">
+              <IonAvatar slot="start">
+                <img src={profilePicture} alt="Profile" />
+              </IonAvatar>
+              <IonCard>
+                <IonCardContent>
+                  This is a comment
+                </IonCardContent>
+              </IonCard>
+            </IonItem>
+            <IonItem lines="none">
+              <IonAvatar slot="start">
+                <img src={profilePicture} alt="Profile" />
+              </IonAvatar>
+              <IonCard>
+                <IonCardContent>
+                  This is another comment
+                </IonCardContent>
+              </IonCard>
+            </IonItem>
+          </IonList>
+          <IonItem lines="none">
+            <IonAvatar slot="start">
+              <img src={profilePicture} alt="Profile" />
+            </IonAvatar>
+            <IonTextarea>
+            </IonTextarea>
+            <IonButton
+              fill="clear"
+              onClick={() => setShowCommentsModal(false)}
+              className="ion-margin-top"
+            >
+              <IonIcon slot="icon-only" icon={send} />
+
+            </IonButton>
+          </IonItem>
+        </IonContent>
+      </IonModal>
+      <IonModal
+        isOpen={addCommentModal}
+        onDidDismiss={() => setAddCommentModal(false)}
+      >
+        <IonHeader translucent>
+          <IonToolbar>
+            <IonButtons slot="primary">
+              <IonButton onClick={() => setAddCommentModal(false)}>
                 <IonIcon slot="icon-only" icon={close} />
               </IonButton>
             </IonButtons>
@@ -55,25 +144,25 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-        <IonItem>
-                <IonTextarea
-                    className="post-text-box"
-                    required
-                    autofocus
-                    minlength={0}
-                    maxlength={2500}
-                    rows={6}
-                    onIonChange={e => setCommentText(e.detail.value!)}
-                >
-                </IonTextarea>
-            </IonItem>
-            <IonButton
-                className="ion-float-right"
-                fill="clear"
-                onClick={() => setShowCommentsModal(false)}
+          <IonItem>
+            <IonTextarea
+              className="post-text-box"
+              required
+              autofocus
+              minlength={0}
+              maxlength={2500}
+              rows={6}
+              onIonChange={e => setCommentText(e.detail.value!)}
             >
-              <IonIcon slot="icon-only" icon={send} />
-            </IonButton>
+            </IonTextarea>
+          </IonItem>
+          <IonButton
+            className="ion-float-right"
+            fill="clear"
+            onClick={() => setAddCommentModal(false)}
+          >
+            <IonIcon slot="icon-only" icon={send} />
+          </IonButton>
         </IonContent>
       </IonModal>
       <IonCard>
@@ -133,8 +222,19 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
           <p className="ion-float-end">...see more</p>
         </IonCardContent>
         <IonItem lines="none">
-          <IonBadge color="light" class="ion-margin-end">{likeButtonValues.likeCount} Likes</IonBadge>
-          <IonBadge color="light">{comments} Comments</IonBadge>
+          <IonButton disabled color="dark" fill="clear" class="ion-margin-end">
+            <IonIcon slot="start" icon={thumbsUp} />
+            {likeButtonValues.likeCount}
+          </IonButton>
+          <IonButton
+            color="medium"
+            fill="clear"
+            onClick={() => {
+              setShowCommentsModal(true);
+            }}
+          >
+            {comments} Comments
+          </IonButton>
         </IonItem>
         <IonItem>
           <IonGrid className="ion-no-padding">
@@ -160,7 +260,7 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
                   fill="clear"
                   expand="full"
                   onClick={() => {
-                    setShowCommentsModal(true);
+                    setAddCommentModal(true);
                   }}
                 >
                   <IonIcon slot="start" icon={chatboxEllipses} />
