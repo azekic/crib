@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonBadge, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea, IonList, IonAvatar } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea, IonList, IonAvatar } from '@ionic/react';
 import { thumbsUp, chatboxEllipses, ellipsisHorizontal, share, trash, close, bookmark, send, arrowBack } from 'ionicons/icons';
 import UserAvatar from '../../../UserAvatar';
 import Truncate from 'react-truncate';

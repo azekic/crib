@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { IonItem, IonTextarea, IonButton, IonIcon } from '@ionic/react';
+import { IonItem, IonTextarea, IonButton, IonIcon, IonImg } from '@ionic/react';
 import { camera, videocam, documentAttach, send } from 'ionicons/icons';
+import { usePhotoGallery, Photo } from '../../hooks/usePhotoGallery';
 import UserAvatar from '../UserAvatar';
 import './PostCreator.css';
 
 type PostProps = {
-    name: string,
-    unit: string,
+    name: string
+    unit: string
     profilePicture: string
     onSubmitAction: React.Dispatch<React.SetStateAction<boolean>>
+    newPhotos: Photo[]
 }
-const PostCreator = ({ name, unit, profilePicture, onSubmitAction }: PostProps) => {
+const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos }: PostProps) => {
     const [text, setText] = useState<string>();
+    const { photos, takePhoto } = usePhotoGallery();
+    const mergedPhotos = photos.concat(newPhotos);
     return (
         <React.Fragment>
             <IonItem lines="none">
@@ -25,7 +29,6 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction }: PostProps) 
                 <IonTextarea
                     className="post-text-box"
                     required
-                    autofocus
                     minlength={0}
                     maxlength={2500}
                     rows={6}
@@ -39,7 +42,7 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction }: PostProps) 
                 className="ion-float-left"
                 fill="clear"
                 color="medium"
-                onClick={() => console.log("camera clicked")}
+                onClick={takePhoto}
             >
                 <IonIcon slot="icon-only" icon={camera} />
             </IonButton>
@@ -65,6 +68,10 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction }: PostProps) 
             >
                 <IonIcon slot="icon-only" icon={send} />
             </IonButton>
+
+                    {mergedPhotos.map((photo, index) => (
+                            <IonImg src={photo.webviewPath} key={index}/>
+                    ))}
         </React.Fragment>
     );
 };

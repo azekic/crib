@@ -44,6 +44,7 @@ import News from './pages/News';
 import MyCondo from './pages/MyCondo';
 import EditUser from './pages/EditUser';
 import ChangeBuilding from './pages/ChangeBuilding';
+import Login from './pages/Login';
 
 const App = () => {
 
@@ -74,7 +75,7 @@ const App = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="primary">
-            <IonButton href="/messages">
+            <IonButton routerLink="/messages">
               <IonIcon slot="icon-only" icon={chatbubblesOutline} />
             </IonButton>
           </IonButtons>
@@ -84,6 +85,7 @@ const App = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
+            <Route path="/login" component={Login} exact={true} />
             <Route path="/home" component={Home} exact={true} />
             <Route path="/news" component={News} exact={true} />
             <Route path="/mycondo" component={MyCondo} exact={true} />

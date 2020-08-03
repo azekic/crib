@@ -3,13 +3,20 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonIcon,
 import { create, camera, close, videocam, documentAttach } from 'ionicons/icons';
 import PostList from '../components/Posts/PostList/PostList';
 import PostCreator from '../components/Posts/PostCreator';
+import { usePhotoGallery } from '../hooks/usePhotoGallery';
 
 const Home: React.FC = () => {
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+  const { photos, takePhoto } = usePhotoGallery();
 
+  const cameraHandler = () => {
+    takePhoto()
+    setShowCreatePostModal(true);
+  }
+  
   return (
     <IonPage>
-      <IonModal 
+      <IonModal
         isOpen={showCreatePostModal}
         onDidDismiss={() => setShowCreatePostModal(false)}
       >
@@ -28,8 +35,9 @@ const Home: React.FC = () => {
           <PostCreator
             name="Andre Zekic"
             unit="221"
-            profilePicture="https://media-exp1.licdn.com/dms/image/C4E03AQEZDUl98iycDA/profile-displayphoto-shrink_400_400/0?e=1600905600&v=beta&t=16_fkwR_k1JGW3Z21F99tIs9WO0f8fmK0Iei6ZAxh3k" 
+            profilePicture="https://media-exp1.licdn.com/dms/image/C4E03AQEZDUl98iycDA/profile-displayphoto-shrink_400_400/0?e=1600905600&v=beta&t=16_fkwR_k1JGW3Z21F99tIs9WO0f8fmK0Iei6ZAxh3k"
             onSubmitAction={setShowCreatePostModal}
+            newPhotos={photos}
           />
         </IonContent>
       </IonModal>
@@ -48,7 +56,7 @@ const Home: React.FC = () => {
                 <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => console.log("videocam clicked")}>
                   <IonIcon slot="icon-only" icon={videocam} />
                 </IonButton>
-                <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => console.log("camera clicked")}>
+                <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => cameraHandler()}>
                   <IonIcon slot="icon-only" icon={camera} />
                 </IonButton>
               </IonCard>

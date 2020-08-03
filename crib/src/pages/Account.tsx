@@ -67,7 +67,10 @@ const Account: React.FC = () => {
                   </IonItem>
                 </IonList>
               </IonCard>
-                <IonButton className="margin-horizontal" expand="block">
+                <IonButton 
+                  routerLink="/login"
+                  className="margin-horizontal" 
+                  expand="block">
                   Log out
                 </IonButton>
             </IonCol>
