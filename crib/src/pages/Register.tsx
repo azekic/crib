@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { IonContent, IonPage, IonCard, IonGrid, IonRow, IonCol, IonCardTitle, IonCardContent, IonList, IonItem, IonLabel, IonInput, IonButton, IonCardHeader } from '@ionic/react';
 
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
+    const [confirmPassword, setConfirmPassword] = useState<string>();
 
     const submitHandler = () => {
-        if (email && password) {
+        if (email && password && confirmPassword) {
         }
 
     }
     const disableSubmit = () => {
-        if (email && password) {
+        if (email && password && confirmPassword) {
             return false;
         }
         return true;
@@ -26,7 +27,7 @@ const Login: React.FC = () => {
                             <IonCard>
                                 <IonCardHeader>
                                     <IonCardTitle>
-                                        Login
+                                        Register
                                     </IonCardTitle>
                                 </IonCardHeader>
                                 <IonCardContent>
@@ -46,34 +47,35 @@ const Login: React.FC = () => {
                                                     value={password}
                                                     onIonChange={e => setPassword(e.detail.value!)}
                                                     type="password"
-
                                                 />
                                             </IonItem>
-                                            <IonButton
-                                                fill="clear"
-                                                size="small"
-                                                color="medium"
-                                            >
-                                                Forgot password?
-                                            </IonButton>
+                                            <IonItem>
+                                                <IonLabel position="floating">Confirm Password</IonLabel>
+                                                <IonInput
+                                                    value={confirmPassword}
+                                                    onIonChange={e => setConfirmPassword(e.detail.value!)}
+                                                    type="password"
+                                                />
+                                            </IonItem>
                                             <IonButton
                                                 disabled={disableSubmit()}
                                                 type="submit"
                                                 expand="block"
                                                 className="ion-margin-top"
                                             >
-                                                <IonLabel>Login</IonLabel>
+                                                <IonLabel>Submit</IonLabel>
                                             </IonButton>
                                         </IonList>
                                     </form>
                                     <IonButton
-                                        routerLink="/register"
+                                        routerLink="/login"
                                         fill="clear"
                                         size="small"
                                         color="medium"
                                     >
-                                        Create an account
+                                        Back to login
                                     </IonButton>
+                                    
                                 </IonCardContent>
                             </IonCard>
                         </IonCol>
@@ -84,4 +86,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default Register;

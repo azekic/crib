@@ -11,7 +11,6 @@ const EditUser: React.FC = () => {
     const submitHandler = () => {
         if (firstName && lastName && email){
         }
-        console.log(firstName, lastName, email);
 
     }
     const disableSubmit = () => {

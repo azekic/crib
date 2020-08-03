@@ -45,6 +45,7 @@ import MyCondo from './pages/MyCondo';
 import EditUser from './pages/EditUser';
 import ChangeBuilding from './pages/ChangeBuilding';
 import Login from './pages/Login';
+import Register from './pages/Register';
 
 const App = () => {
 
@@ -86,6 +87,7 @@ const App = () => {
         <IonTabs>
           <IonRouterOutlet>
             <Route path="/login" component={Login} exact={true} />
+            <Route path="/register" component={Register} exact={true} />
             <Route path="/home" component={Home} exact={true} />
             <Route path="/news" component={News} exact={true} />
             <Route path="/mycondo" component={MyCondo} exact={true} />

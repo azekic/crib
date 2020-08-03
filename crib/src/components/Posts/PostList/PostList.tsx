@@ -24,7 +24,7 @@ const PostList = () => {
                 comments={8}
                 text={postText2}
                 image="https://i.dailymail.co.uk/i/pix/2017/07/18/14/427394C200000578-4707164-Happy_people_are_healthier_Some_65_percent_of_relevant_studies_f-m-21_1500384450707.jpg"
-                profilePicture="https://media-exp1.licdn.com/dms/image/C5603AQHLMtr0-XdiUw/profile-displayphoto-shrink_400_400/0?e=1600905600&v=beta&t=vI86lqHpZsT5eOw-Us96d4-tuoo_gvuQRls8PiijPuk"
+                profilePicture="https://media-exp1.licdn.com/dms/image/C4E03AQGrZFthoaG-_Q/profile-displayphoto-shrink_400_400/0?e=1602115200&v=beta&t=Q12WkePYkgXN3JSMDHCONmC5rPG9aG2mTGwXyGL4xZY"
             />
             <PostItem
                 name="Elon Musk"
