@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonButtons, IonModal } from '@ionic/react';
 import { create, camera, close, videocam, documentAttach } from 'ionicons/icons';
 import PostList from '../components/Posts/PostList/PostList';
 import PostCreator from '../components/Posts/PostCreator';
 import { usePhotoGallery } from '../hooks/usePhotoGallery';
+import AuthContext from '../context/auth-context';
 
 const Home: React.FC = () => {
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const { photos, takePhoto } = usePhotoGallery();
+  const context = useContext(AuthContext);
 
   const cameraHandler = () => {
     takePhoto()
