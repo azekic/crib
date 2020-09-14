@@ -8,3 +8,11 @@
 .crib-logo {
     font-size: 28px;
 }
+
+.mobile-content {
+    --padding-top: 44px;
+}
+
+.desktop-content {
+    --padding-top: 56px;
+}

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { IonCard, IonCardTitle, IonCardContent, IonList, IonItem, IonLabel, IonInput, IonButton, IonCardHeader } from '@ionic/react';
+import { IonCard, IonCardTitle, IonCardContent, IonList, IonItem, IonLabel, IonInput, IonButton, IonCardHeader, IonPage, IonContent, IonGrid, IonRow, IonCol, isPlatform } from '@ionic/react';
 
-
-const Register: React.FC = () => {
+type RegisterProps = {
+    setTitle: React.Dispatch<React.SetStateAction<string>>
+}
+const Register = ({setTitle}: RegisterProps) => {    
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const [confirmPassword, setConfirmPassword] = useState<string>();
+    const contentStyle = isPlatform("desktop") ? "desktop-content" : "mobile-content"; 
 
     const submitHandler = () => {
         if (email && password && confirmPassword) {
@@ -19,13 +22,7 @@ const Register: React.FC = () => {
         return true;
     }
     return (
-        <IonCard>
-            <IonCardHeader>
-                <IonCardTitle>
-                    Register
-            </IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
+        <div className="ion-padding">
                 <form onSubmit={() => submitHandler()}>
                     <IonList>
                         <IonItem>
@@ -63,16 +60,15 @@ const Register: React.FC = () => {
                     </IonList>
                 </form>
                 <IonButton
-                    routerLink="auth/login"
+                    onClick={() => setTitle('Login')}
                     fill="clear"
                     size="small"
                     color="medium"
                 >
-                    Back to login
+                    Go to Login
                 </IonButton>
 
-            </IonCardContent>
-        </IonCard>
+            </div>
     );
 };
 

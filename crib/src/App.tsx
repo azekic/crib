@@ -14,7 +14,10 @@ import {
   IonButtons,
   IonButton,
   IonTitle,
-  IonText
+  IonText,
+  IonContent,
+  IonSearchbar,
+  IonModal
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { chatbubblesOutline, personOutline, homeOutline, newspaperOutline, albumsOutline } from 'ionicons/icons';
@@ -46,6 +49,9 @@ import EditUser from './pages/EditUser';
 import ChangeBuilding from './pages/ChangeBuilding';
 
 import AuthContext from './context/auth-context';
+import Welcome from './pages/Welcome';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import Auth from './pages/Auth';
 
 const App = () => {
@@ -67,11 +73,15 @@ const App = () => {
     setAuthState({ token: null, userId: null })
   }
 
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
+
   const [tabsState] =
     useState<{
       tabsPlacement: "top" | "bottom" | undefined
       tabsLayout: "icon-top" | "icon-start" | "icon-end" | "icon-bottom" | "icon-hide" | "label-hide" | undefined
-      tabsStyle: string | undefined,
+      tabsStyle: string | undefined
     }>(isPlatform("desktop") ? {
       tabsPlacement: "top", tabsLayout: "icon-start", tabsStyle: "tab-desktop"
     } : {
@@ -81,6 +91,7 @@ const App = () => {
 
   return (
     <IonApp>
+      
       <AuthContext.Provider
         value={{
           token: authState.token,
@@ -89,32 +100,53 @@ const App = () => {
           logout: logout
         }}
       >
+        <IonModal
+        isOpen={showLoginModal}
+        onDidDismiss={() => setShowLoginModal(false)}
+      >
+        <Auth title='Login' setShowModal={setShowLoginModal}/>
+      </IonModal>
+      <IonModal
+        isOpen={showRegisterModal}
+        onDidDismiss={() => setShowRegisterModal(false)}
+      >
+        <Auth title='Register' setShowModal={setShowRegisterModal}/>
+      </IonModal>
         <IonHeader>
           <IonToolbar>
-            {authState.token &&
+          <IonTitle className="crib-logo"><IonText color="primary"><b>crib</b></IonText></IonTitle>
+
               <IonButtons slot="primary">
+              {authState.token ?
+
                 <IonButton routerLink="/messages">
                   <IonIcon slot="icon-only" icon={chatbubblesOutline} />
+                  
                 </IonButton>
+            : 
+            <React.Fragment>
+              <IonButton onClick={() => setShowLoginModal(true)} color='medium'>Login</IonButton>
+            <IonButton className="ion-hide-sm-down" onClick={() => setShowRegisterModal(true)} color='primary'>Sign Up</IonButton>
+              </React.Fragment>
+              }
               </IonButtons>
-            }
-            <IonTitle className="crib-logo"><IonText color="primary"><b>crib</b></IonText></IonTitle>
+
           </IonToolbar>
         </IonHeader>
         {authState.token == null ?
           <IonReactRouter>
               <IonRouterOutlet>
-                <Route path="/auth" component={Auth} />
-                <Redirect from="/" to="/auth" />
+                <Route path="/welcome" component={Welcome} />
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={Register} />
+                <Redirect from="/" to="/welcome" />
               </IonRouterOutlet>
           </IonReactRouter> :
           <IonReactRouter>
             <IonTabs>
               <IonRouterOutlet>
-                <Route path="/auth" component={Auth} />
                 <Route path="/home" component={Home} exact={true} />
-                <Redirect from="/auth" to="/home" />
-
+                <Redirect from="/welcome" to="/home" />
                 <Route path="/news" component={News} exact={true} />
                 <Route path="/mycondo" component={MyCondo} exact={true} />
                 <Route path="/account" component={Account} exact={true} />

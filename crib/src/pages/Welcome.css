@@ -1,0 +1,70 @@
+
+
+
+
+  .button {
+    --box-shadow: none;
+    --border-radius: 8px;
+    text-transform: uppercase;
+  }
+  .swiper-slide {
+    display: block;
+  }
+
+  .swiper-slide h2 {
+    margin-top: 2.8rem;
+  }
+
+  .welcome-image {
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+  }
+
+  .landing-content {
+    flex: 1 1 50%;
+  }
+
+  .landing-header {
+    font-size: 64px;
+    font-weight: bold;
+  }
+
+  .landing-text {
+    font-size: 22px;
+  }
+  .landing-img {
+    flex: 1 1 50%;
+  }
+
+  .content {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .card-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    justify-content: space-around;
+  }
+
+  ion-card {
+    flex: 0 1 293px;
+  }
+
+
+  @media (max-width: 960px) {
+    .content {
+        -ms-flex-pack: start;
+        justify-content: flex-start
+    }
+    ion-card {
+      flex: 0 1 350px;
+    }
+    .landing-img {
+        display: none;
+    }
+}
+

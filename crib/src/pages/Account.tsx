@@ -1,16 +1,17 @@
 import React from 'react';
-import { IonContent, IonPage, IonCard, IonList, IonItem, IonLabel, IonCardHeader, IonCardTitle, IonIcon, IonButton, IonToggle, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonContent, IonPage, IonCard, IonList, IonItem, IonLabel, IonCardHeader, IonCardTitle, IonIcon, IonButton, IonToggle, IonGrid, IonRow, IonCol, isPlatform } from '@ionic/react';
 import { moon } from 'ionicons/icons';
 import './Account.css';
 
 const toggleDarkModeHandler = () => {
   document.body.classList.toggle("dark");
 };
+const contentStyle = isPlatform("desktop") ? undefined : "mobile-content"; 
 
 const Account: React.FC = () => {
   return (
     <IonPage>
-      <IonContent>
+      <IonContent className={contentStyle}>
         <IonGrid fixed className="ion-no-padding">
           <IonRow>
             <IonCol>

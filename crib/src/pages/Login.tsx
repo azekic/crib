@@ -1,21 +1,37 @@
 import React, { useState, useContext } from 'react';
-import { IonCard, IonCardTitle, IonCardContent, IonList, IonItem, IonLabel, IonInput, IonButton, IonCardHeader } from '@ionic/react';
+import { IonCard, IonCardContent, IonList, IonItem, IonLabel, IonInput, IonButton, IonCardHeader, IonPage, IonContent, IonGrid, IonRow, IonCol, isPlatform, IonHeader } from '@ionic/react';
 import AuthContext from '../context/auth-context';
+import { useForm, Controller } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
+type LoginProps = {
+    setTitle: React.Dispatch<React.SetStateAction<string>>
+}
 
-const Login = () => {
+let initialValues = {
+    email: "",
+    password: ""
+  };
+
+const Login = ({setTitle}: LoginProps) => {
+    const { handleSubmit, control, errors } = useForm();
+
+    const onSubmit = (data: any) => {
+        debugger;
+        alert(JSON.stringify(data, null, 2));
+      };
+
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const { login } = useContext(AuthContext);
-    const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (email?.trim().length === 0 || password?.trim().length === 0) {
+    const submitHandler = (data: { [x: string]: any; }) => {
+        if (data.email?.trim().length === 0 || data.password?.trim().length === 0) {
             return;
         }
         let requestBody = {
             query: `
                 query {
-                    login(email: "${email}", password: "${password}") {
+                    login(email: "${data.email}", password: "${data.password}") {
                         userId
                         token
                         tokenExpiration
@@ -49,40 +65,58 @@ const Login = () => {
         });
         console.log("Context" + login);
     }
-    const disableSubmit = () => {
-        if (email && password) {
-            return false;
-        }
-        return true;
-    }
+    
     return (
-
-        <IonCard>
-            <IonCardHeader>
-                <IonCardTitle>
-                    Login
-            </IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-                <form onSubmit={submitHandler}>
+        
+        <div className="ion-padding">
+                <form onSubmit={handleSubmit(data => submitHandler(data))}>
                     <IonList>
-                        <IonItem>
-                            <IonLabel position="floating">Email Address</IonLabel>
-                            <IonInput
-                                value={email}
-                                onIonChange={e => setEmail(e.detail.value!)}
-                                type="email"
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel position="floating">Password</IonLabel>
-                            <IonInput
-                                value={password}
-                                onIonChange={e => setPassword(e.detail.value!)}
-                                type="password"
-
-                            />
-                        </IonItem>
+                    <IonItem>
+              <IonLabel position="floating">Email</IonLabel>
+              <Controller
+                render={({ onChange, onBlur, value }) => (
+                  <IonInput onIonChange={onChange} />
+                )}
+                control={control}
+                name="email"
+                rules={{
+                  required: "This is a required field",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    message: "invalid email address"
+                  }
+                }}
+                type="email"
+              />
+            </IonItem>
+            <ErrorMessage
+              errors={errors}
+              name="email"
+              as={<div style={{ color: "red" }} />}
+            />
+            <IonItem>
+              <IonLabel position="floating">Password</IonLabel>
+              <Controller
+                render={({ onChange, onBlur, value }) => (
+                  <IonInput onIonChange={onChange} type="password"
+                  />
+                )}
+                control={control}
+                name="password"
+                rules={{
+                  required: "This is a required field",
+                  minLength: {
+                    value: 5,
+                    message: "min length is 5"
+                  }
+                }}
+              />
+            </IonItem>
+            <ErrorMessage
+              errors={errors}
+              name="password"
+              as={<div style={{ color: "red" }} />}
+            />
                         <IonButton
                             fill="clear"
                             size="small"
@@ -91,7 +125,6 @@ const Login = () => {
                             Forgot password?
                     </IonButton>
                         <IonButton
-                            disabled={disableSubmit()}
                             type="submit"
                             expand="block"
                             className="ion-margin-top"
@@ -101,15 +134,15 @@ const Login = () => {
                     </IonList>
                 </form>
                 <IonButton
-                    routerLink="/auth/register"
+                    onClick={() => setTitle('Register')
+                    }
                     fill="clear"
                     size="small"
                     color="medium"
                 >
                     Create an account
             </IonButton>
-            </IonCardContent>
-        </IonCard>
+            </div>
     );
 };
 

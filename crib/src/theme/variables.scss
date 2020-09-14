@@ -76,9 +76,10 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-tint: #f5f6f9;
 
   --ion-grid-width-xs:              100%;
-  --ion-grid-width-sm:              720px;
-  --ion-grid-width-lg:              720px;
-  --ion-grid-width-xl:              720px;
+  --ion-grid-width-sm:              960px;
+  --ion-grid-width-md:              960px;
+  --ion-grid-width-lg:              960px;
+  --ion-grid-width-xl:              960px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -387,13 +388,13 @@ $grid-breakpoints: (
 );
 
 $grid-max-widths: (
-  md: 768px
+  lg: 960px
 );
-@media (min-width: map-get($grid-breakpoints, md)) {
+@media (min-width: map-get($grid-breakpoints, lg)) {
  ion-header .in-toolbar,
  ion-tabs .tabbar {
    margin: 0;
-   padding-right: calc((100% - #{map-get($grid-max-widths, md)}) / 2);
-   padding-left: calc((100% - #{map-get($grid-max-widths, md)}) / 2);
+   padding-right: calc((100% - #{map-get($grid-max-widths, lg)}) / 2);
+   padding-left: calc((100% - #{map-get($grid-max-widths, lg)}) / 2);
  }
 }
