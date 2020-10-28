@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -15,8 +15,6 @@ import {
   IonButton,
   IonTitle,
   IonText,
-  IonContent,
-  IonSearchbar,
   IonModal
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -54,6 +52,13 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Auth from './pages/Auth';
 
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:8000/graphql',
+  cache: new InMemoryCache()
+});
+
 const App = () => {
 
   const [authState, setAuthState] =
@@ -61,8 +66,8 @@ const App = () => {
       token: null | string,
       userId: null | string
     }>({
-      token: null,
-      userId: null
+      token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId")
     });
 
   const login = (token: string, userId: string) => {
@@ -91,7 +96,7 @@ const App = () => {
 
   return (
     <IonApp>
-      
+      <ApolloProvider client={client}>
       <AuthContext.Provider
         value={{
           token: authState.token,
@@ -118,11 +123,10 @@ const App = () => {
 
               <IonButtons slot="primary">
               {authState.token ?
-
-                <IonButton routerLink="/messages">
-                  <IonIcon slot="icon-only" icon={chatbubblesOutline} />
-                  
-                </IonButton>
+                  <IonButton routerLink="/messages">
+                    <IonIcon slot="icon-only" icon={chatbubblesOutline} />
+                    
+                  </IonButton>
             : 
             <React.Fragment>
               <IonButton onClick={() => setShowLoginModal(true)} color='medium'>Login</IonButton>
@@ -178,6 +182,7 @@ const App = () => {
           </IonReactRouter>
         }
       </AuthContext.Provider>
+      </ApolloProvider>
     </IonApp>
   )
 };

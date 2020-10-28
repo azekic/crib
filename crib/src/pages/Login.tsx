@@ -1,75 +1,59 @@
-import React, { useState, useContext } from 'react';
-import { IonCard, IonCardContent, IonList, IonItem, IonLabel, IonInput, IonButton, IonCardHeader, IonPage, IonContent, IonGrid, IonRow, IonCol, isPlatform, IonHeader } from '@ionic/react';
+import React, { useContext, useEffect } from 'react';
+import { IonList, IonItem, IonLabel, IonInput, IonButton } from '@ionic/react';
 import AuthContext from '../context/auth-context';
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import { gql, useLazyQuery } from '@apollo/client';
 
+const LOGIN_USER = gql`
+  query Login($email: String!, $password: String!){
+    login(email: $email, password: $password) {
+      userId
+      token
+    }
+  }
+`;
 type LoginProps = {
     setTitle: React.Dispatch<React.SetStateAction<string>>
-}
 
-let initialValues = {
-    email: "",
-    password: ""
-  };
+}
 
 const Login = ({setTitle}: LoginProps) => {
     const { handleSubmit, control, errors } = useForm();
-
-    const onSubmit = (data: any) => {
-        debugger;
-        alert(JSON.stringify(data, null, 2));
-      };
-
-    const [email, setEmail] = useState<string>();
-    const [password, setPassword] = useState<string>();
     const { login } = useContext(AuthContext);
-    const submitHandler = (data: { [x: string]: any; }) => {
-        if (data.email?.trim().length === 0 || data.password?.trim().length === 0) {
+
+    const [loginUser, {data}] = useLazyQuery(LOGIN_USER);
+    useEffect(() => {
+      if(data && data.login) {
+        login(
+          data.login.token, 
+          data.login.userId, 
+        );
+        localStorage.setItem("token", data.login.token);
+        localStorage.setItem("userId", data.login.userId);
+      }
+    })
+
+    
+    const submitHandler = (input: { [x: string]: any; }) => {
+        if (input.email?.trim().length === 0 || input.password?.trim().length === 0) {
             return;
         }
-        let requestBody = {
-            query: `
-                query {
-                    login(email: "${data.email}", password: "${data.password}") {
-                        userId
-                        token
-                        tokenExpiration
-                    }
-                }
-            `
-        };
-        fetch('http://localhost:8000/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            if (res.status !== 200 && res.status !== 201) {
-                throw new Error('Failed!');
-            }
-            return res.json();
-        })
-        .then(resData => {
-            if (resData.data.login.token) {
-                login(
-                    resData.data.login.token, 
-                    resData.data.login.userId, 
-                    );
-
-            }
-        })
-        .catch(err => {
-            console.log(err);
+        loginUser( {
+          variables: {
+            email: input.email,
+            password: input.password
+          }
         });
-        console.log("Context" + login);
+
+        console.log(data);
+
     }
     
     return (
         
         <div className="ion-padding">
-                <form onSubmit={handleSubmit(data => submitHandler(data))}>
+                <form onSubmit={handleSubmit(input => submitHandler(input))}>
                     <IonList>
                     <IonItem>
               <IonLabel position="floating">Email</IonLabel>

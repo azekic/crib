@@ -19,9 +19,9 @@ module.exports = {
             throw new Error('Unauthenticated!');
         }
         const post = new Post({
-            title: args.postInput.title,
             body: args.postInput.body,
-            author: req.userId
+            author: req.userId,
+            images: args.postInput.images
         });
         let createdPost;
         try {

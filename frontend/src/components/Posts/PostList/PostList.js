@@ -9,13 +9,14 @@ const postList = props => {
                 key={post._id} 
                 postId={post._id} 
                 title={post.title} 
-                votes={post.votes}
+                likes={post.likes}
                 body={post.body}
                 createdAt={post.createdAt}
                 userId={props.authUserId}
                 authorId={post.author._id}
                 onDetail={props.onViewDetail}
                 comments={post.comments}
+                images={post.images}
             />
         );
     });

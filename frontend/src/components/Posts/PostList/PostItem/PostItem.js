@@ -116,7 +116,7 @@ class PostItem extends Component {
             <div>
                 <h1>{this.props.title}</h1>
                 {this.props.userId === this.props.creatorId && <h2>Created by you</h2>}
-                <h2>{this.props.votes} likes - {new Date(this.props.createdAt).toLocaleDateString()}</h2>
+                <h2>{this.props.likes} likes - {new Date(this.props.createdAt).toLocaleDateString()}</h2>
                 <div className="posts_list-item__body">{this.props.body}</div>
             </div>
             {/* <div>

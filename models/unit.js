@@ -16,7 +16,13 @@ const unitSchema = new Schema({
     {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    reportedIssues: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'ReportedIssue'
+        }
+    ]
 }
 );
 

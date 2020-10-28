@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea, IonList, IonAvatar } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea, IonList, IonAvatar, IonCardSubtitle } from '@ionic/react';
 import { thumbsUp, chatboxEllipses, ellipsisHorizontal, share, trash, close, bookmark, send, arrowBack } from 'ionicons/icons';
 import UserAvatar from '../../../UserAvatar';
 import Truncate from 'react-truncate';
 import './PostItem.css';
+interface Comment {
+  _id: string,
+  createdAt: Date,
+  updatedAt: Date,
+  text: string
+}
 type PostProps = {
   name: string,
   unit: string,
-  likes: number,
-  comments: number,
+  likes: string,
+  comments: Comment[],
   text: string,
-  image?: string,
+  images?: string[],
   profilePicture: string
 }
-const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: PostProps) => {
+const PostItem = ({ name, unit, likes, comments, text, images, profilePicture }: PostProps) => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [addCommentModal, setAddCommentModal] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
@@ -40,7 +46,11 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
         likeCount: likes
       });
   };
+  var noLikes = likeButtonValues.likeCount == "0";
+  var noComments = comments.length === 0;
 
+  const firstReactText = "Be the first to react to this";
+  
   return (
     <React.Fragment>
 
@@ -216,19 +226,32 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
             <UserAvatar profilePicture={profilePicture} unit={unit} name={name} />
           </IonItem>
         </IonCardHeader>
-        {image && <img width="100%" src={image} alt="Post" />}
+        {images && images.length > 0 && <img width="100%" src={images[0]} alt="Post" />}
         <IonCardContent>
           <IonText color="dark">
-          <Truncate lines={truncated && 4} ellipsis={<span> <a onClick={() => handleTruncate(false)} className='show-more-link'>...show more</a></span>}>
+          {/* { <Truncate lines={truncated && 4} ellipsis={
+              <span> 
+                <button 
+                  onClick={() => handleTruncate(false)} 
+                  className='show-more-link'>...show more
+                </button>
+              </span>
+            }>
               {text}
-            </Truncate>
+            </Truncate> } */}
+            {text}
+
           </IonText>
         </IonCardContent>
+        {!noLikes &&
         <IonItem lines="none">
+        { likeButtonValues.likeCount != "0" &&
           <IonButton disabled color="dark" fill="clear" class="ion-margin-end">
             <IonIcon slot="start" icon={thumbsUp} />
             {likeButtonValues.likeCount}
           </IonButton>
+        }
+        { !noComments &&
           <IonButton
             color="medium"
             fill="clear"
@@ -238,7 +261,10 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
           >
             {comments} Comments
           </IonButton>
+        }
         </IonItem>
+}
+
         <IonItem>
           <IonGrid className="ion-no-padding">
             <IonRow>
@@ -273,6 +299,15 @@ const PostItem = ({ name, unit, likes, comments, text, image, profilePicture }: 
             </IonRow>
           </IonGrid>
         </IonItem>
+        {
+        }
+        { noLikes && noComments &&
+          <IonItem>
+            <IonCardSubtitle>
+            {firstReactText}
+            </IonCardSubtitle>
+        </IonItem>
+        }
       </IonCard>
     </React.Fragment>
   );

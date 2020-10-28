@@ -1,20 +1,82 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonButtons, IonModal, isPlatform } from '@ionic/react';
 import { create, camera, close, videocam, documentAttach } from 'ionicons/icons';
 import PostList from '../components/Posts/PostList/PostList';
 import PostCreator from '../components/Posts/PostCreator';
 import { usePhotoGallery } from '../hooks/usePhotoGallery';
-import AuthContext from '../context/auth-context';
+import Spinner from '../components/Spinner/Spinner';
+import { gql, useQuery } from '@apollo/client';
+
+const GET_POSTS = gql`
+  query GetPosts {
+      posts {
+          _id
+          body
+          likes
+          createdAt
+          author {
+              _id
+              email
+              firstName
+              lastName
+              profilePicture
+          }
+          comments {
+              _id
+              text
+              createdAt
+              user {
+                  _id
+                  firstName
+                  lastName
+                  profilePicture
+              }
+          }
+          images
+      }
+    }
+  `
 
 const Home: React.FC = () => {
+  interface Comment {
+    _id: string,
+    createdAt: Date,
+    updatedAt: Date,
+    text: string
+}
+
+interface User {
+  _id: string,
+  firstName?: string,
+  lastName?: string,
+  profilePicture?: string
+}
+
+  interface Post {
+    _id: string;
+    body: string,
+    images: string[],
+    likes: string,
+    createdAt: Date,
+    author: User,
+    comments: Comment[]
+}
+
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const { photos, takePhoto } = usePhotoGallery();
-  const context = useContext(AuthContext);
+
   const cameraHandler = () => {
     takePhoto()
     setShowCreatePostModal(true);
   }
-  const contentStyle = isPlatform("desktop") ? undefined : "mobile-content"; 
+  const contentStyle = isPlatform("desktop") ? undefined : "mobile-content";
+  
+  const {loading, error, data, refetch} = useQuery(GET_POSTS);
+
+  if (error) {
+    throw new Error("Failed!");
+  }
+
   return (
     <IonPage>
       <IonModal
@@ -36,9 +98,10 @@ const Home: React.FC = () => {
           <PostCreator
             name="Andre Zekic"
             unit="221"
-            profilePicture="https://media-exp1.licdn.com/dms/image/C4E03AQEZDUl98iycDA/profile-displayphoto-shrink_400_400/0?e=1600905600&v=beta&t=16_fkwR_k1JGW3Z21F99tIs9WO0f8fmK0Iei6ZAxh3k"
+            profilePicture={""}
             onSubmitAction={setShowCreatePostModal}
             newPhotos={photos}
+            refetch={refetch}
           />
         </IonContent>
       </IonModal>
@@ -61,7 +124,10 @@ const Home: React.FC = () => {
                   <IonIcon slot="icon-only" icon={camera} />
                 </IonButton>
               </IonCard>
-              <PostList />
+              {loading ?
+                <Spinner /> : 
+                <PostList posts={data.posts}/>
+              }
             </IonCol>
           </IonRow>
         </IonGrid>

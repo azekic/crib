@@ -35,7 +35,6 @@ module.exports = {
             return transformComment(result);
         }
         catch (err) {
-            console.log(err);
             throw err;
         }
     },

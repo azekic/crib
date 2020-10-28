@@ -71,7 +71,12 @@ const Account: React.FC = () => {
                 <IonButton 
                   routerLink="/login"
                   className="margin-horizontal" 
-                  expand="block">
+                  expand="block"
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("userId");
+                  }}
+                  >
                   Log out
                 </IonButton>
             </IonCol>

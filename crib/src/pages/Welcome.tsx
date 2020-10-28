@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonSlides, IonSlide, IonButton, IonIcon, IonImg, isPlatform, IonCardHeader, IonList, IonCard, IonCardTitle, IonCardContent, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle } from '@ionic/react';
+import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonButton, isPlatform, IonCardHeader, IonList, IonCard, IonCardTitle, IonCardContent, IonModal } from '@ionic/react';
 import './Welcome.css';
 import Auth from './Auth';
 
@@ -37,13 +37,13 @@ const Welcome: React.FC = () => {
 
           </div>
           <div className='landing-img'>
-          <img src="./img/slide-2.png"/>
+          <img src="./img/slide-2.png" alt="slide 2"/>
           </div>
           </div>
           
           <IonList className='card-list'>
             <IonCard>
-              <img src="./img/slide-1.png"/>
+              <img src="./img/slide-1.png" alt="slide 1"/>
               <IonCardHeader>
                 <IonCardTitle>Share photos and posts</IonCardTitle>
                 </IonCardHeader>
@@ -53,7 +53,7 @@ const Welcome: React.FC = () => {
       </IonCardContent>
             </IonCard>
             <IonCard>
-              <img src="./img/slide-3.png"/>
+              <img src="./img/slide-3.png" alt="slide 3"/>
               <IonCardHeader>
                 <IonCardTitle>Ping neighbours privately</IonCardTitle>
                 </IonCardHeader>
@@ -62,7 +62,7 @@ const Welcome: React.FC = () => {
       </IonCardContent>
             </IonCard>
             <IonCard>
-              <img src="./img/slide-4.png"/>
+              <img src="./img/slide-4.png" alt="slide 4"/>
               <IonCardHeader>
                 <IonCardTitle>Send repair requests</IonCardTitle>
                 </IonCardHeader>

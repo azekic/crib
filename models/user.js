@@ -20,6 +20,17 @@ const userSchema = new Schema({
     unit: {
         type: Schema.Types.ObjectId,
         ref: 'Unit'
+    },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
+    profilePicture: {
+        type: String
     }
 });
 

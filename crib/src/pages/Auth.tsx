@@ -27,7 +27,7 @@ const Auth = ({title, setShowModal}: AuthProps) =>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          {modalTitle == 'Login' ? <Login setTitle={setTitle}/> : <Register setTitle={setTitle}/>}
+          {modalTitle === 'Login' ? <Login setTitle={setTitle}/> : <Register setTitle={setTitle}/>}
         </IonContent>
         </React.Fragment>
         )

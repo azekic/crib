@@ -49,7 +49,7 @@ class PostsPage extends Component {
                         _id
                         title
                         body
-                        votes
+                        likes
                         createdAt
                     }
                 }
@@ -77,7 +77,7 @@ class PostsPage extends Component {
                     _id: resData.data.createPost._id,
                     title: resData.data.createPost.title,
                     body: resData.data.createPost.body,
-                    votes: resData.data.createPost.votes,
+                    likes: resData.data.createPost.likes,
                     createdAt: resData.data.createPost.createdAt,
                     author: {
                         _id: this.context.userId
@@ -104,7 +104,7 @@ class PostsPage extends Component {
                         _id
                         title
                         body
-                        votes
+                        likes
                         createdAt
                         author {
                             _id
@@ -188,7 +188,7 @@ class PostsPage extends Component {
                     confirmText="Add Comment"
                 >
                     <h1>{this.state.selectedPost.title}</h1>
-                    <h2>{this.state.selectedPost.votes} likes - {new Date(this.state.selectedPost.createdAt).toLocaleDateString()}</h2>
+                    <h2>{this.state.selectedPost.likes} likes - {new Date(this.state.selectedPost.createdAt).toLocaleDateString()}</h2>
                     <p>{this.state.selectedPost.body}</p>
                 </Modal>
                 }

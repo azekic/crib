@@ -13,13 +13,13 @@ type Comment {
 
 type Post {
     _id: ID!
-    title: String!
     body: String!
-    votes: Int!
+    likes: Int!
     createdAt: String!
     updatedAt: String!
     author: User!
     comments: [Comment!]
+    images: [String]
 }
 
 type User {
@@ -27,7 +27,37 @@ type User {
     email: String!
     password: String
     createdPosts: [Post!]
-    unit: Unit
+    unit: Unit!
+    firstName: String!
+    lastName: String!
+    profilePicture: String
+}
+
+type Amenity {
+    _id: ID!
+    name: String!
+    image: String
+    troubleshoots: [Troubleshoot!]
+}
+
+type Troubleshoot {
+    id: ID!
+    amenity: Amenity!
+    name: String!
+    description: String!
+    solution: String!
+}
+
+type ReportedIssue {
+    id: ID!
+    createdAt: String!
+    updatedAt: String!
+    resolved: Boolean!
+    description: String!
+    troubleshoot: Troubleshoot!
+    unit: Unit!
+    user: User!
+    photo: String
 }
 
 type Building {
@@ -42,6 +72,7 @@ type Unit {
     unitNumber: Int!
     building: Building!
     occupant: User
+    reportedIssues: [ReportedIssue]
 }
 
 type AuthData {
@@ -51,13 +82,20 @@ type AuthData {
 }
 
 input PostInput {
-    title: String!
     body: String!
+    images: [String]
 }
 
 input UserInput {
     email: String!
     password: String!
+    firstName: String!
+    lastName: String!
+    profilePicture: String
+}
+
+input UpdateProfilePictureInput {
+    profilePicture: String!
 }
 
 input UnitInput {
@@ -76,21 +114,46 @@ input CommentInput {
     text: String!
 }
 
+input TroubleshootInput {
+    amenityId: ID!
+    name: String!
+    description: String!
+    solution: String!
+}
+
+input ReportedIssueInput {
+    description: String!
+    troubleshootId: ID!
+    photo: String
+}
+
+input AmenityInput {
+    name: String,
+    image: String
+}
+
 type RootQuery {
     posts: [Post!]!
     comments: [Comment!]!
     buildings: [Building!]!
     login(email: String!, password: String!): AuthData!
     unit: Unit
+    amenities: [Amenity!]!
+    reportedIssues: [ReportedIssue!]!
+    troubleshoots: [Troubleshoot!]!
 }
 
 type RootMutation {
     createPost(postInput: PostInput): Post
     createUser(userInput: UserInput): User
+    updateProfilePicture(updateProfilePictureInput: UpdateProfilePictureInput): User
     addUnit(unitInput: UnitInput): Unit!
     addBuilding(buildingInput: BuildingInput): Building
     addComment(commentInput: CommentInput): Comment!
     deleteComment(commentId: ID!): Post!
+    addTroubleshoot(troubleshootInput: TroubleshootInput): Troubleshoot!
+    addReportedIssue(reportedIssueInput: ReportedIssueInput): ReportedIssue!
+    addAmenity(amenityInput: AmenityInput): Amenity!
 }
 
 schema {

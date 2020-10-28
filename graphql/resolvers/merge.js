@@ -5,7 +5,7 @@ const User = require('../../models/user');
 const Comment = require('../../models/comment');
 const Unit = require('../../models/unit');
 const Building = require('../../models/building');
-
+const ReportedIssue = require('../../models/reportedIssue');
 const { dateToString } = require('../../helpers/date');
 
 const postLoader = new DataLoader((postIds) => {
@@ -18,6 +18,10 @@ const userLoader = new DataLoader((userIds) => {
 
 const buildingLoader = new DataLoader((buildingIds) => {
     return Building.find({_id: {$in: buildingIds}});
+});
+
+const unitLoader = new DataLoader((unitIds) => {
+    return Unit.find({_id: {$in: unitIds}});
 });
 
 const posts = async postIds => {
@@ -40,6 +44,17 @@ const comments = async commentIds => {
     }
 };
 
+const reportedIssues = async reportedIssueIds => {
+    try {
+        const reportedIssues = await ReportedIssue.find({ _id: { $in: reportedIssueIds } });
+        return reportedIssues.map(reportedIssue => {
+            return transformReportedIssue(reportedIssue);
+        })
+    } catch (err) {
+        throw err;
+    }
+}
+
 const singleBuilding = async buildingId => {
     try {
         const building = await buildingLoader.load(buildingId.toString());
@@ -58,6 +73,15 @@ const singlePost = async postId => {
         }
 };
 
+const singleUnit = async unitId => {
+    try {
+        const unit = await unitLoader.load(unitId.toString());
+        return unitId;
+    } catch (err) {
+            throw err;
+        }
+};
+
 const user = async userId => {
     try {
         const user = await userLoader.load(userId.toString());
@@ -69,6 +93,8 @@ const user = async userId => {
         throw err;
     }
 };
+
+
 
 const transformPost = post => {
     return {
@@ -90,11 +116,23 @@ const transformComment = comment => {
      };
 };
 
+const transformReportedIssue = reportedIssue => {
+    return { 
+        ...reportedIssue._doc, 
+        createdAt: dateToString(reportedIssue._doc.createdAt),
+        updatedAt: dateToString(reportedIssue._doc.updatedAt),
+        troubleshoot: singleTroubleshoot.bind(this, reportedIssue._doc.troubleshoot),
+        unit: singleUnit.bind(this, reportedIssue._doc.unit),
+        user: user.bind(this, reportedIssue._doc.user)
+     };
+};
+
 const transformUnit = unit => {
     return { 
         ...unit._doc, 
         building: singleBuilding.bind(this, unit._doc.building._id),
-        occupant: user.bind(this, unit._doc.occupant)
+        occupant: user.bind(this, unit._doc.occupant),
+        reportedIssues: reportedIssues.bind(this, unit._doc.reportedIssues)
      };
 };
 

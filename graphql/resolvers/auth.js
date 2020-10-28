@@ -15,13 +15,27 @@ module.exports = {
                 .hash(args.userInput.password, 12);
             const user = new User({
                 email: args.userInput.email,
-                password: hashedPassword
+                password: hashedPassword,
+                firstName: args.userInput.firstName,
+                lastName: args.userInput.lastName
             })
             const result = await user.save();
             return { ...result._doc, password: null };
         } catch (err) {
             throw err;
         }
+    },
+
+    updateProfilePicture: async (args, req) => {
+        if (!req.isAuth) { 
+            throw new Error('Unauthenticated!');
+        }
+        const user = await User.findOneAndUpdate(
+            {_id: req.userId},
+            {profilePicture: args.updateProfilePictureInput.profilePicture}
+        );
+        return user;
+
     },
 
     login: async ({email, password}) => {
