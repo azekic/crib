@@ -9,6 +9,7 @@ import { gql, useMutation } from '@apollo/client';
 import {Like, Comment} from '../../../../models';
 import CommentCreator from '../../../Comments/CommentCreator';
 import CommentList from '../../../Comments/CommentList';
+import {LIKE_POST, UNLIKE_POST, DELETE_POST} from '../../../../graphql/mutations';
 
 type PostProps = {
   postId: string,
@@ -20,37 +21,7 @@ type PostProps = {
   images?: string[],
   profilePicture: string
 }
-const DELETE_POST = gql`
-  mutation DeletePost($postId: ID!){
-    deletePost(postId: $postId) {
-      _id
-    }
-  }
-`
 
-const LIKE_POST = gql`
-  mutation LikePost($postId: ID!){
-    likePost(postId: $postId) {
-      _id
-      user {
-        _id
-      }
-    }
-  }
-`
-const UNLIKE_POST = gql`
-  mutation UnLikePost($likeId: ID!){
-    unLikePost(likeId: $likeId) {
-      _id
-      likes {
-        _id
-        user {
-          _id
-        }
-      }
-    }
-  }
-`
 const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePicture }: PostProps) => {
   const context = useContext(AuthContext);
   const [showActionSheet, setShowActionSheet] = useState(false);

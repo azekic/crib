@@ -4,15 +4,8 @@ import AuthContext from '../context/auth-context';
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { gql, useLazyQuery } from '@apollo/client';
+import { LOGIN_USER } from '../graphql/queries';
 
-const LOGIN_USER = gql`
-  query Login($email: String!, $password: String!){
-    login(email: $email, password: $password) {
-      userId
-      token
-    }
-  }
-`;
 type LoginProps = {
     setTitle: React.Dispatch<React.SetStateAction<string>>
 

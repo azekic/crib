@@ -6,20 +6,7 @@ import AuthContext, {ContextProps} from '../../context/auth-context';
 import UserAvatar from '../UserAvatar';
 import './PostCreator.css';
 import { gql, useMutation } from '@apollo/client';
-
-const CREATE_POST = gql`
-    mutation CreatePost($body: String!, $imgUrls: [String]){
-        createPost(postInput: {body: $body, images: $imgUrls}) {
-            _id
-            body
-            likes {
-                _id
-            }
-            createdAt
-            images
-        }
-    }
-`;
+import {CREATE_POST} from '../../graphql/mutations';
 
 type PostProps = {
     name: string

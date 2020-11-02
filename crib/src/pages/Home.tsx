@@ -5,42 +5,8 @@ import PostList from '../components/Posts/PostList/PostList';
 import PostCreator from '../components/Posts/PostCreator';
 import { usePhotoGallery } from '../hooks/usePhotoGallery';
 import Spinner from '../components/Spinner/Spinner';
-import { gql, useQuery } from '@apollo/client';
-
-const GET_POSTS = gql`
-  query GetPosts {
-      posts {
-          _id
-          body
-          likes {
-            _id
-            user {
-              _id
-            }
-          }
-          createdAt
-          author {
-              _id
-              email
-              firstName
-              lastName
-              profilePicture
-          }
-          comments {
-              _id
-              text
-              createdAt
-              user {
-                  _id
-                  firstName
-                  lastName
-                  profilePicture
-              }
-          }
-          images
-      }
-    }
-  `
+import { useQuery } from '@apollo/client';
+import {GET_POSTS} from '../graphql/queries';
 
 const Home: React.FC = () => {
 

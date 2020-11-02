@@ -2,11 +2,15 @@ import React from 'react';
 import { IonList, IonItem, IonLabel, IonInput, IonButton } from '@ionic/react';
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import { useMutation } from '@apollo/client';
+import { CREATE_USER } from '../graphql/mutations';
+
 type RegisterProps = {
     setTitle: React.Dispatch<React.SetStateAction<string>>
 }
 const Register = ({setTitle}: RegisterProps) => {    
     const { handleSubmit, control, errors } = useForm();
+    const [createUser] = useMutation(CREATE_USER);
 
     const submitHandler = (data: { [x: string]: any; }) => {
         if (data.email?.trim().length === 0 || 
@@ -16,37 +20,15 @@ const Register = ({setTitle}: RegisterProps) => {
         ) {
             return;
         }
-        let requestBody = {
-            query: `
-                mutation {
-                        createUser(userInput: {email: "${data.email}", password: "${data.password}", firstName: "${data.firstName}", lastName: "${data.lastName}"}) {
-                            _id
-                            email
-                            firstName
-                            lastName
-                        }
-                    }
-            `
-        };
-        fetch('http://localhost:8000/graphql', {
-            method: 'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
+        createUser({
+          variables: { 
+              email: data.email, 
+              password: data.password,
+              firstName: data.firstName,
+              lastName: data.lastName
             }
-        }).then(res => {
-            if (res.status !== 200 && res.status !== 201) {
-                throw new Error('Failed!');
-            }
-            return res.json();
-        })
-        .then(resData => {
-            console.log(resData);
-        })
-        .catch(err => {
-            console.log(err);
         });
-    }    
+    }
     return (
         <div className="ion-padding">
                             <form onSubmit={handleSubmit(data => submitHandler(data))}>

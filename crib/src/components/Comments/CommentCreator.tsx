@@ -2,16 +2,9 @@ import { IonItem, IonTextarea, IonButton, IonIcon, IonAvatar } from '@ionic/reac
 import { send } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 import AuthContext, {ContextProps} from '../../context/auth-context';
-import {Context, gql, useMutation} from '@apollo/client';
+import {gql, useMutation} from '@apollo/client';
+import {ADD_COMMENT} from '../../graphql/mutations';
 
-const ADD_COMMENT = gql`
-    mutation ($postId: ID!, $text: String!){
-        addComment(commentInput: {postId: $postId, text: $text}) {
-            _id
-            text
-        }
-    }
-`;
 type CommentCreatorProps = {
     postId: string
 }
