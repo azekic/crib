@@ -1,29 +1,6 @@
 import React from 'react';
 import PostItem from './PostItem/PostItem'
-
-interface Comment {
-    _id: string,
-    createdAt: Date,
-    updatedAt: Date,
-    text: string
-}
-
-interface User {
-    _id: string,
-    firstName?: string,
-    lastName?: string,
-    profilePicture?: string
-}
-
-interface Post {
-    _id: string;
-    body: string,
-    images?: string[],
-    likes: string,
-    createdAt: Date,
-    author: User,
-    comments: Comment[]
-}
+import {Post} from '../../../models';
 
 type PostListProps = {
     posts: Array<Post>
@@ -34,6 +11,7 @@ const PostList = ({posts}: PostListProps) => {
         return (
         <PostItem
         key={post._id}
+        postId={post._id}
         name={post.author.firstName + " " + post.author.lastName}
         unit="221"
         likes={post.likes}
@@ -43,7 +21,7 @@ const PostList = ({posts}: PostListProps) => {
         profilePicture={post.author.profilePicture ?? ""}
         />
         )
-    })
+    });
     return (
         <React.Fragment>
             {postItems.reverse()}

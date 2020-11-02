@@ -1,51 +1,25 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { IonItem, IonTextarea, IonButton, IonIcon, IonImg } from '@ionic/react';
 import { camera, videocam, documentAttach, send } from 'ionicons/icons';
 import { usePhotoGallery, Photo } from '../../hooks/usePhotoGallery';
-import AuthContext from '../../context/auth-context';
+import AuthContext, {ContextProps} from '../../context/auth-context';
 import UserAvatar from '../UserAvatar';
 import './PostCreator.css';
-import { ApolloQueryResult, gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
 const CREATE_POST = gql`
     mutation CreatePost($body: String!, $imgUrls: [String]){
         createPost(postInput: {body: $body, images: $imgUrls}) {
             _id
             body
-            likes
+            likes {
+                _id
+            }
             createdAt
             images
         }
     }
 `;
-
-type ContextProps = {
-    token: string | null,
-    userId: string | null,
-    login: (token: string, userId: string) => void,
-    logout: () => void
-};
-interface Comment {
-    _id: string,
-    createdAt: Date,
-    updatedAt: Date,
-    text: string
-}
-interface User {
-    _id: string,
-    firstName?: string,
-    lastName?: string,
-    profilePicture?: string
-}
-  interface Post {
-    _id: string;
-    body: string,
-    images: string[],
-    likes: string,
-    createdAt: Date,
-    author: User,
-    comments: Comment[]
-}
 
 type PostProps = {
     name: string
@@ -53,7 +27,6 @@ type PostProps = {
     profilePicture: string
     onSubmitAction: React.Dispatch<React.SetStateAction<boolean>>
     newPhotos: Photo[]
-    refetch: (variables?: Partial<Record<string, any>> | undefined) => Promise<ApolloQueryResult<any>>
 }
 
 function handleCreatePost(
@@ -64,7 +37,6 @@ function handleCreatePost(
     )
     {
     if (body.trim().length === 0){
-        console.log("body empty");
       return;
   }
   if (mergedPhotos.length !== 0) {
@@ -88,8 +60,6 @@ function handleCreatePost(
       })
      .then((resData) => {
         var imgUrls : String[] = [resData.url];
-         console.log(imgUrls);
-         console.log(resData.url);
          createPost({
             variables: { 
                 body: body, 
@@ -118,7 +88,7 @@ function handleCreatePost(
 
 }
 
-const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos, refetch}: PostProps) => {
+const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos}: PostProps) => {
     const [text, setText] = useState<string>();
     const { photos, takePhoto } = usePhotoGallery();
     const context = useContext(AuthContext);
@@ -134,7 +104,12 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos, re
                                 fragment CreatePost on Post{
                                     _id
                                     body
-                                    likes
+                                    likes {
+                                        _id
+                                        user {
+                                            _id
+                                        }
+                                    }
                                     createdAt
                                     images
                                 }
@@ -167,6 +142,7 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos, re
                     value={text}
                     placeholder="What do you want to write about?"
                     onIonChange={e => setText(e.detail.value!)}
+                    autofocus
                 >
                 </IonTextarea>
             </IonItem>

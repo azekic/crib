@@ -1,56 +1,113 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea, IonList, IonAvatar, IonCardSubtitle } from '@ionic/react';
-import { thumbsUp, chatboxEllipses, ellipsisHorizontal, share, trash, close, bookmark, send, arrowBack } from 'ionicons/icons';
+import { thumbsUp, chatboxEllipses, ellipsisHorizontal, share, trash, close, bookmark, send, arrowBack, toggle } from 'ionicons/icons';
 import UserAvatar from '../../../UserAvatar';
+import AuthContext from '../../../../context/auth-context';
 import Truncate from 'react-truncate';
 import './PostItem.css';
-interface Comment {
-  _id: string,
-  createdAt: Date,
-  updatedAt: Date,
-  text: string
-}
+import { gql, useMutation } from '@apollo/client';
+import {Like, Comment} from '../../../../models';
+import CommentCreator from '../../../Comments/CommentCreator';
+import CommentList from '../../../Comments/CommentList';
+
 type PostProps = {
+  postId: string,
   name: string,
   unit: string,
-  likes: string,
+  likes: Like[],
   comments: Comment[],
   text: string,
   images?: string[],
   profilePicture: string
 }
-const PostItem = ({ name, unit, likes, comments, text, images, profilePicture }: PostProps) => {
+const DELETE_POST = gql`
+  mutation DeletePost($postId: ID!){
+    deletePost(postId: $postId) {
+      _id
+    }
+  }
+`
+
+const LIKE_POST = gql`
+  mutation LikePost($postId: ID!){
+    likePost(postId: $postId) {
+      _id
+      user {
+        _id
+      }
+    }
+  }
+`
+const UNLIKE_POST = gql`
+  mutation UnLikePost($likeId: ID!){
+    unLikePost(likeId: $likeId) {
+      _id
+      likes {
+        _id
+        user {
+          _id
+        }
+      }
+    }
+  }
+`
+const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePicture }: PostProps) => {
+  const context = useContext(AuthContext);
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [addCommentModal, setAddCommentModal] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
-  const [likeButtonValues, setLikeButtonValues] = useState({
-    color: "medium",
-    text: "Like",
-    likeCount: likes
-  });
-  const [truncated, handleTruncate] = useState(true);
-
-  // eslint-disable-next-line
-  const [commentText, setCommentText] = useState<string>();
-
-  const toggleLikeHandler = () => {
-    likeButtonValues.text === "Like" ?
-      setLikeButtonValues({
-        color: "primary",
-        text: "Liked",
-        likeCount: likes + 1
-      }) :
-      setLikeButtonValues({
-        color: "medium",
-        text: "Like",
-        likeCount: likes
-      });
+  const getUserLike = (likes: Like[]) => {
+    return likes.find(l => l.user._id === context.userId);
   };
-  var noLikes = likeButtonValues.likeCount == "0";
-  var noComments = comments.length === 0;
+  const [likeButtonValues, setLikeButtonValues] =
+  useState((getUserLike(likes) === undefined) ? {
+      color: "medium",
+      text: "Like",
+      likeCount: likes.length
+    } : {
+      color: "primary",
+      text: "Liked",
+      likeCount: likes.length
+    });
 
+  const [truncated, handleTruncate] = useState(true);
+  // eslint-disable-next-line
+  const [likePost, {loading, data: likeData}] = useMutation(LIKE_POST);
+  const [unLikePost] = useMutation(UNLIKE_POST);
+  const [deletePost] = useMutation(DELETE_POST);
+  const toggleLikeHandler = (postId: String) => {
+    let userLike = getUserLike(likes);
+    if (userLike === undefined) {
+      likePost({
+        variables: {
+          postId: postId
+        },
+        context: {
+          headers: {
+            Authorization: 'Bearer ' + context.token
+          }
+        }
+      });
+      setLikeButtonValues({color: "primary", text: "Liked", likeCount: likeButtonValues.likeCount + 1});
+    } else {
+      unLikePost({
+        variables: {
+          likeId: userLike._id
+        },
+        context: {
+          headers: {
+            Authorization: 'Bearer ' + context.token
+          }
+        }
+      });
+      setLikeButtonValues({color: "medium", text: "Like", likeCount: likeButtonValues.likeCount - 1});
+    }
+  };
+  var noLikes = likeButtonValues.likeCount == 0;
+  var noComments = comments.length === 0;
+  var commentsName = comments.length > 1 ? " Comments" : " Comment";
   const firstReactText = "Be the first to react to this";
-  
+
   return (
     <React.Fragment>
 
@@ -99,46 +156,11 @@ const PostItem = ({ name, unit, likes, comments, text, images, profilePicture }:
               color="dark"
               fill="clear"
             >
-              {comments} Comments
+              {comments.length} Comments
           </IonButton>
           </IonItem>
-          <IonList>
-            <IonItem lines="none">
-              <IonAvatar slot="start">
-                <img src={profilePicture} alt="Profile" />
-              </IonAvatar>
-              <IonCard>
-                <IonCardContent>
-                  This is a comment
-                </IonCardContent>
-              </IonCard>
-            </IonItem>
-            <IonItem lines="none">
-              <IonAvatar slot="start">
-                <img src={profilePicture} alt="Profile" />
-              </IonAvatar>
-              <IonCard>
-                <IonCardContent>
-                  This is another comment
-                </IonCardContent>
-              </IonCard>
-            </IonItem>
-          </IonList>
-          <IonItem lines="none">
-            <IonAvatar slot="start">
-              <img src={profilePicture} alt="Profile" />
-            </IonAvatar>
-            <IonTextarea>
-            </IonTextarea>
-            <IonButton
-              fill="clear"
-              onClick={() => setShowCommentsModal(false)}
-              className="ion-margin-top"
-            >
-              <IonIcon slot="icon-only" icon={send} />
-
-            </IonButton>
-          </IonItem>
+          <CommentList comments={comments}/>
+          <CommentCreator postId={postId}/>
         </IonContent>
       </IonModal>
       <IonModal
@@ -156,25 +178,7 @@ const PostItem = ({ name, unit, likes, comments, text, images, profilePicture }:
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          <IonItem>
-            <IonTextarea
-              className="post-text-box"
-              required
-              autofocus
-              minlength={0}
-              maxlength={2500}
-              rows={6}
-              onIonChange={e => setCommentText(e.detail.value!)}
-            >
-            </IonTextarea>
-          </IonItem>
-          <IonButton
-            className="ion-float-right"
-            fill="clear"
-            onClick={() => setAddCommentModal(false)}
-          >
-            <IonIcon slot="icon-only" icon={send} />
-          </IonButton>
+          <CommentCreator postId={postId}/>
         </IonContent>
       </IonModal>
       <IonCard>
@@ -198,7 +202,16 @@ const PostItem = ({ name, unit, likes, comments, text, images, profilePicture }:
               role: 'destructive',
               icon: trash,
               handler: () => {
-                console.log('Delete clicked');
+                deletePost({
+                  variables: {
+                    postId: postId
+                  },
+                  context: {
+                    headers: {
+                      Authorization: 'Bearer ' + context.token
+                    }
+                  }
+                });
               }
             }, {
               text: 'Share',
@@ -243,9 +256,8 @@ const PostItem = ({ name, unit, likes, comments, text, images, profilePicture }:
 
           </IonText>
         </IonCardContent>
-        {!noLikes &&
         <IonItem lines="none">
-        { likeButtonValues.likeCount != "0" &&
+        { likeButtonValues.likeCount != 0 &&
           <IonButton disabled color="dark" fill="clear" class="ion-margin-end">
             <IonIcon slot="start" icon={thumbsUp} />
             {likeButtonValues.likeCount}
@@ -259,11 +271,10 @@ const PostItem = ({ name, unit, likes, comments, text, images, profilePicture }:
               setShowCommentsModal(true);
             }}
           >
-            {comments} Comments
+            {comments.length + commentsName}
           </IonButton>
         }
         </IonItem>
-}
 
         <IonItem>
           <IonGrid className="ion-no-padding">
@@ -275,7 +286,7 @@ const PostItem = ({ name, unit, likes, comments, text, images, profilePicture }:
                   fill="clear"
                   expand="full"
                   onClick={() => {
-                    toggleLikeHandler();
+                    toggleLikeHandler(postId);
                   }}
                 >
                   <IonIcon slot="start" icon={thumbsUp} />

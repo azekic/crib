@@ -4,6 +4,8 @@ const commentResolver = require('./comment');
 const buildingResolver = require('./building');
 const amenityResolver = require ('./amenity');
 const unitResolver = require('./unit');
+const likeResolver = require('./like');
+
 
 const rootResolver = {
     ...authResolver,
@@ -11,7 +13,8 @@ const rootResolver = {
     ...commentResolver,
     ...buildingResolver,
     ...unitResolver,
-    ...amenityResolver
+    ...amenityResolver,
+    ...likeResolver
 };
 
 module.exports = rootResolver;

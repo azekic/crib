@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-type ContextProps = {
+export type ContextProps = {
     token: string | null,
     userId: string | null,
     login: (token: string, userId: string) => void,

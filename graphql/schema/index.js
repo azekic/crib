@@ -11,10 +11,18 @@ type Comment {
     text: String!
 }
 
+type Like {
+    _id: ID!
+    user: User!
+    post: Post!
+    createdAt: String!
+    updatedAt: String!
+}
+
 type Post {
     _id: ID!
     body: String!
-    likes: Int!
+    likes: [Like!]
     createdAt: String!
     updatedAt: String!
     author: User!
@@ -114,6 +122,10 @@ input CommentInput {
     text: String!
 }
 
+input LikeInput {
+    postId: ID!
+}
+
 input TroubleshootInput {
     amenityId: ID!
     name: String!
@@ -134,6 +146,7 @@ input AmenityInput {
 
 type RootQuery {
     posts: [Post!]!
+    likes: [Like!]!
     comments: [Comment!]!
     buildings: [Building!]!
     login(email: String!, password: String!): AuthData!
@@ -145,11 +158,14 @@ type RootQuery {
 
 type RootMutation {
     createPost(postInput: PostInput): Post
+    deletePost(postId: ID!): User
     createUser(userInput: UserInput): User
     updateProfilePicture(updateProfilePictureInput: UpdateProfilePictureInput): User
     addUnit(unitInput: UnitInput): Unit!
     addBuilding(buildingInput: BuildingInput): Building
     addComment(commentInput: CommentInput): Comment!
+    unLikePost(likeId: ID!): Post!
+    likePost(postId: ID!): Like!
     deleteComment(commentId: ID!): Post!
     addTroubleshoot(troubleshootInput: TroubleshootInput): Troubleshoot!
     addReportedIssue(reportedIssueInput: ReportedIssueInput): ReportedIssue!

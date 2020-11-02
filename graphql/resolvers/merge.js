@@ -1,7 +1,7 @@
 const DataLoader = require('dataloader');
-
 const Post = require('../../models/post');
 const User = require('../../models/user');
+const Like = require('../../models/like');
 const Comment = require('../../models/comment');
 const Unit = require('../../models/unit');
 const Building = require('../../models/building');
@@ -10,6 +10,10 @@ const { dateToString } = require('../../helpers/date');
 
 const postLoader = new DataLoader((postIds) => {
     return posts(postIds);
+});
+
+const likeLoader = new DataLoader((likeIds) => {
+    return likes(likeIds);
 });
 
 const userLoader = new DataLoader((userIds) => {
@@ -38,6 +42,17 @@ const comments = async commentIds => {
         const comments = await Comment.find({ _id: { $in: commentIds } });
         return comments.map(comment => {
             return transformComment(comment);
+        });
+    } catch (err) {
+        throw err;
+    }
+};
+
+const likes = async likeIds => {
+    try {
+        const likes = await Like.find({ _id: { $in: likeIds } });
+        return likes.map(like => {
+            return transformLike(like);
         });
     } catch (err) {
         throw err;
@@ -87,7 +102,8 @@ const user = async userId => {
         const user = await userLoader.load(userId.toString());
         return {
             ...user._doc,
-            createdPosts: () => postLoader.loadMany(user._doc.createdPosts)
+            createdPosts: () => postLoader.loadMany(user._doc.createdPosts),
+            likes: () => likeLoader.loadMany(user._doc.likes)
         }
     } catch (err) {
         throw err;
@@ -102,7 +118,8 @@ const transformPost = post => {
         createdAt: dateToString(post._doc.createdAt),
         updatedAt: dateToString(post._doc.updatedAt),
         author: user.bind(this, post.author),
-        comments: comments.bind(this, post._doc.comments)
+        comments: comments.bind(this, post._doc.comments),
+        likes: likes.bind(this, post._doc.likes)
     };
 };
 
@@ -113,6 +130,16 @@ const transformComment = comment => {
         updatedAt: dateToString(comment._doc.updatedAt),
         user: user.bind(this, comment._doc.user),
         post: singlePost.bind(this, comment._doc.post)
+     };
+};
+
+const transformLike = like => {
+    return { 
+        ...like._doc, 
+        createdAt: dateToString(like._doc.createdAt),
+        updatedAt: dateToString(like._doc.updatedAt),
+        user: user.bind(this, like._doc.user),
+        post: singlePost.bind(this, like._doc.post)
      };
 };
 
@@ -139,6 +166,7 @@ const transformUnit = unit => {
 exports.transformComment = transformComment;
 exports.transformPost = transformPost;
 exports.transformUnit = transformUnit;
+exports.transformLike = transformLike;
 
 //exports.user = user;
 //exports.posts = posts;

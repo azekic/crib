@@ -7,11 +7,12 @@ const postSchema = new Schema({
         type: String,
         required: true
     },
-    likes: {
-        type: Number,
-        required: true,
-        default: 0
-    },
+    likes: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Like'
+        }
+    ],
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

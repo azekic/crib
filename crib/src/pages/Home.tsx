@@ -12,7 +12,12 @@ const GET_POSTS = gql`
       posts {
           _id
           body
-          likes
+          likes {
+            _id
+            user {
+              _id
+            }
+          }
           createdAt
           author {
               _id
@@ -38,29 +43,6 @@ const GET_POSTS = gql`
   `
 
 const Home: React.FC = () => {
-  interface Comment {
-    _id: string,
-    createdAt: Date,
-    updatedAt: Date,
-    text: string
-}
-
-interface User {
-  _id: string,
-  firstName?: string,
-  lastName?: string,
-  profilePicture?: string
-}
-
-  interface Post {
-    _id: string;
-    body: string,
-    images: string[],
-    likes: string,
-    createdAt: Date,
-    author: User,
-    comments: Comment[]
-}
 
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const { photos, takePhoto } = usePhotoGallery();
@@ -71,10 +53,10 @@ interface User {
   }
   const contentStyle = isPlatform("desktop") ? undefined : "mobile-content";
   
-  const {loading, error, data, refetch} = useQuery(GET_POSTS);
+  const {loading, error, data} = useQuery(GET_POSTS);
 
   if (error) {
-    throw new Error("Failed!");
+    throw new Error(error.message);
   }
 
   return (
@@ -101,7 +83,6 @@ interface User {
             profilePicture={""}
             onSubmitAction={setShowCreatePostModal}
             newPhotos={photos}
-            refetch={refetch}
           />
         </IonContent>
       </IonModal>

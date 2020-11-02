@@ -45,7 +45,7 @@ module.exports = {
         try {
             const comment = await Comment.findById(args.commentId).populate('post');
             const post = transformPost(comment.post);
-            await Comment.deleteOne({ _id: args.commentId });
+            await Comment.findByIdAndDelete(args.commentId);
             return post;
         } catch (err) {
             throw err;
