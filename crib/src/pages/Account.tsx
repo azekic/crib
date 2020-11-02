@@ -6,7 +6,7 @@ import './Account.css';
 const toggleDarkModeHandler = () => {
   document.body.classList.toggle("dark");
 };
-const contentStyle = isPlatform("desktop") ? undefined : "mobile-content"; 
+const contentStyle = isPlatform("desktop") ? undefined : "mobile-content";
 
 const Account: React.FC = () => {
   return (
@@ -68,16 +68,16 @@ const Account: React.FC = () => {
                   </IonItem>
                 </IonList>
               </IonCard>
-                <IonButton 
-                  routerLink="/login"
-                  className="margin-horizontal" 
-                  expand="block"
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("userId");
-                  }}
-                  >
-                  Log out
+              <IonButton
+                routerLink="/login"
+                className="margin-horizontal"
+                expand="block"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("userId");
+                }}
+              >
+                Log out
                 </IonButton>
             </IonCol>
           </IonRow>

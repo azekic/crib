@@ -97,91 +97,91 @@ const App = () => {
   return (
     <IonApp>
       <ApolloProvider client={client}>
-      <AuthContext.Provider
-        value={{
-          token: authState.token,
-          userId: authState.userId,
-          login: login,
-          logout: logout
-        }}
-      >
-        <IonModal
-        isOpen={showLoginModal}
-        onDidDismiss={() => setShowLoginModal(false)}
-      >
-        <Auth title='Login' setShowModal={setShowLoginModal}/>
-      </IonModal>
-      <IonModal
-        isOpen={showRegisterModal}
-        onDidDismiss={() => setShowRegisterModal(false)}
-      >
-        <Auth title='Register' setShowModal={setShowRegisterModal}/>
-      </IonModal>
-        <IonHeader>
-          <IonToolbar>
-          <IonTitle className="crib-logo"><IonText color="primary"><b>crib</b></IonText></IonTitle>
+        <AuthContext.Provider
+          value={{
+            token: authState.token,
+            userId: authState.userId,
+            login: login,
+            logout: logout
+          }}
+        >
+          <IonModal
+            isOpen={showLoginModal}
+            onDidDismiss={() => setShowLoginModal(false)}
+          >
+            <Auth title='Login' setShowModal={setShowLoginModal} />
+          </IonModal>
+          <IonModal
+            isOpen={showRegisterModal}
+            onDidDismiss={() => setShowRegisterModal(false)}
+          >
+            <Auth title='Register' setShowModal={setShowRegisterModal} />
+          </IonModal>
+          <IonHeader>
+            <IonToolbar>
+              <IonTitle className="crib-logo"><IonText color="primary"><b>crib</b></IonText></IonTitle>
 
               <IonButtons slot="primary">
-              {authState.token ?
+                {authState.token ?
                   <IonButton routerLink="/messages">
                     <IonIcon slot="icon-only" icon={chatbubblesOutline} />
-                    
+
                   </IonButton>
-            : 
-            <React.Fragment>
-              <IonButton onClick={() => setShowLoginModal(true)} color='medium'>Login</IonButton>
-            <IonButton className="ion-hide-sm-down" onClick={() => setShowRegisterModal(true)} color='primary'>Sign Up</IonButton>
-              </React.Fragment>
-              }
+                  :
+                  <React.Fragment>
+                    <IonButton onClick={() => setShowLoginModal(true)} color='medium'>Login</IonButton>
+                    <IonButton className="ion-hide-sm-down" onClick={() => setShowRegisterModal(true)} color='primary'>Sign Up</IonButton>
+                  </React.Fragment>
+                }
               </IonButtons>
 
-          </IonToolbar>
-        </IonHeader>
-        {authState.token == null ?
-          <IonReactRouter>
+            </IonToolbar>
+          </IonHeader>
+          {authState.token == null ?
+            <IonReactRouter>
               <IonRouterOutlet>
                 <Route path="/welcome" component={Welcome} />
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
                 <Redirect from="/" to="/welcome" />
               </IonRouterOutlet>
-          </IonReactRouter> :
-          <IonReactRouter>
-            <IonTabs>
-              <IonRouterOutlet>
-                <Route path="/home" component={Home} exact={true} />
-                <Redirect from="/welcome" to="/home" />
-                <Route path="/news" component={News} exact={true} />
-                <Route path="/mycondo" component={MyCondo} exact={true} />
-                <Route path="/account" component={Account} exact={true} />
-                <Route path="/messages" component={Messages} exact={true} />
-                <Route path="/account/edit" component={EditUser} exact={true} />
-                <Route path="/account/edit/building" component={ChangeBuilding} exact={true} />
-              </IonRouterOutlet>
+            </IonReactRouter> :
+            <IonReactRouter>
+              <IonTabs>
+                <IonRouterOutlet>
+                  <Route path="/home" component={Home} exact={true} />
+                  <Redirect from="/welcome" to="/home" />
+                  <Route path="/news" component={News} exact={true} />
+                  <Route path="/mycondo" component={MyCondo} exact={true} />
+                  <Route path="/account" component={Account} exact={true} />
+                  <Route path="/messages" component={Messages} exact={true} />
+                  <Route path="/account/edit" component={EditUser} exact={true} />
+                  <Route path="/account/edit/building" component={ChangeBuilding} exact={true} />
+                </IonRouterOutlet>
 
-              <IonTabBar slot={tabsState.tabsPlacement} className={tabsState.tabsStyle}>
-                <IonTabButton tab="home" href="/home" layout={tabsState.tabsLayout}>
-                  <IonIcon icon={albumsOutline} />
-                  <IonLabel>Posts</IonLabel>
-                </IonTabButton>
-                <IonTabButton tab="news" href="/news" layout={tabsState.tabsLayout}>
-                  <IonIcon icon={newspaperOutline} />
-                  <IonLabel>News</IonLabel>
-                </IonTabButton>
-                <IonTabButton tab="messages" href="/mycondo" layout={tabsState.tabsLayout}>
-                  <IonIcon icon={homeOutline} />
-                  <IonLabel>My Condo</IonLabel>
-                </IonTabButton>
-                <IonTabButton tab="account" href="/account" layout={tabsState.tabsLayout}>
-                  <IonIcon icon={personOutline} />
-                  <IonLabel>Account</IonLabel>
-                </IonTabButton>
-              </IonTabBar>
+                <IonTabBar slot={tabsState.tabsPlacement} className={tabsState.tabsStyle}>
+                  <IonTabButton tab="home" href="/home" layout={tabsState.tabsLayout}>
+                    <IonIcon icon={albumsOutline} />
+                    <IonLabel>Posts</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="news" href="/news" layout={tabsState.tabsLayout}>
+                    <IonIcon icon={newspaperOutline} />
+                    <IonLabel>News</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="messages" href="/mycondo" layout={tabsState.tabsLayout}>
+                    <IonIcon icon={homeOutline} />
+                    <IonLabel>My Condo</IonLabel>
+                  </IonTabButton>
+                  <IonTabButton tab="account" href="/account" layout={tabsState.tabsLayout}>
+                    <IonIcon icon={personOutline} />
+                    <IonLabel>Account</IonLabel>
+                  </IonTabButton>
+                </IonTabBar>
 
-            </IonTabs>
-          </IonReactRouter>
-        }
-      </AuthContext.Provider>
+              </IonTabs>
+            </IonReactRouter>
+          }
+        </AuthContext.Provider>
       </ApolloProvider>
     </IonApp>
   )

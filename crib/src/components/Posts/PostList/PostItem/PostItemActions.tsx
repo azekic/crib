@@ -11,7 +11,7 @@ type PostItemActionsProps = {
     setShowActionSheet: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const PostItemActions = ({postId, showActionSheet, setShowActionSheet}: PostItemActionsProps) => {
+const PostItemActions = ({ postId, showActionSheet, setShowActionSheet }: PostItemActionsProps) => {
     const [deletePost] = useMutation(DELETE_POST);
     const context = useContext(AuthContext);
     return (
@@ -23,38 +23,38 @@ const PostItemActions = ({postId, showActionSheet, setShowActionSheet}: PostItem
                 role: 'destructive',
                 icon: trash,
                 handler: () => {
-                deletePost({
-                    variables: {
-                    postId: postId
-                    },
-                    context: {
-                    headers: {
-                        Authorization: 'Bearer ' + context.token
-                    }
-                    }
-                });
+                    deletePost({
+                        variables: {
+                            postId: postId
+                        },
+                        context: {
+                            headers: {
+                                Authorization: 'Bearer ' + context.token
+                            }
+                        }
+                    });
                 }
             }, {
                 text: 'Share',
                 icon: share,
                 handler: () => {
-                console.log('Share clicked');
+                    console.log('Share clicked');
                 }
             }, {
                 text: 'Save',
                 icon: bookmark,
                 handler: () => {
-                console.log('Save clicked');
+                    console.log('Save clicked');
                 }
             }, {
                 text: 'Cancel',
                 icon: close,
                 role: 'cancel',
                 handler: () => {
-                console.log('Cancel clicked');
+                    console.log('Cancel clicked');
                 }
             }]}
-            >
+        >
         </IonActionSheet>
     )
 }

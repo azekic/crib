@@ -6,7 +6,7 @@ import PostCreator from '../components/Posts/PostCreator';
 import { usePhotoGallery } from '../hooks/usePhotoGallery';
 import Spinner from '../components/Spinner/Spinner';
 import { useQuery } from '@apollo/client';
-import {GET_POSTS} from '../graphql/queries';
+import { GET_POSTS } from '../graphql/queries';
 
 const Home: React.FC = () => {
 
@@ -18,8 +18,8 @@ const Home: React.FC = () => {
     setShowCreatePostModal(true);
   }
   const contentStyle = isPlatform("desktop") ? undefined : "mobile-content";
-  
-  const {loading, error, data} = useQuery(GET_POSTS);
+
+  const { loading, error, data } = useQuery(GET_POSTS);
 
   if (error) {
     throw new Error(error.message);
@@ -72,8 +72,8 @@ const Home: React.FC = () => {
                 </IonButton>
               </IonCard>
               {loading ?
-                <Spinner /> : 
-                <PostList posts={data.posts}/>
+                <Spinner /> :
+                <PostList posts={data.posts} />
               }
             </IonCol>
           </IonRow>

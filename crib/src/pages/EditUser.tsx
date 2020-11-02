@@ -23,38 +23,37 @@ type ContextProps = {
 function handleUpdateProfilePicture(
     context: ContextProps,
     photos: Photo[],
-    updateProfilePicture: any)
-    {
-        if (photos.length !== 0) {
-            const formData = new FormData();
-            photos.forEach((photo) => {
-              formData.append("file", photo.blob);
-              formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY ?? "");
-              formData.append("api_secret", process.env.REACT_APP_CLOUDINARY_API_SECRET ?? "");
-              formData.append("upload_preset", "crib_upload");
-              }
-            );
-             fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/upload`, {
-                 method: "POST",
-                 body: formData
-             }).then(res => {
-                  if (res.status !== 200 && res.status !== 201) {
-                      throw new Error('Failed!');
-                  }
-                  return res.json();
-              })
-             .then((resData) => {
-                 updateProfilePicture({
-                    variables: { 
+    updateProfilePicture: any) {
+    if (photos.length !== 0) {
+        const formData = new FormData();
+        photos.forEach((photo) => {
+            formData.append("file", photo.blob);
+            formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY ?? "");
+            formData.append("api_secret", process.env.REACT_APP_CLOUDINARY_API_SECRET ?? "");
+            formData.append("upload_preset", "crib_upload");
+        }
+        );
+        fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/upload`, {
+            method: "POST",
+            body: formData
+        }).then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed!');
+            }
+            return res.json();
+        })
+            .then((resData) => {
+                updateProfilePicture({
+                    variables: {
                         profilePicture: resData.url
-                     },
-                     context: {
-                         headers: {
-                             Authorization: 'Bearer ' + context.token
-                         }
-                     }
-                 });
-             });
+                    },
+                    context: {
+                        headers: {
+                            Authorization: 'Bearer ' + context.token
+                        }
+                    }
+                });
+            });
     }
 }
 const EditUser: React.FC = () => {
@@ -66,12 +65,12 @@ const EditUser: React.FC = () => {
     const context = useContext(AuthContext);
     const [editUser] = useMutation(UPDATE_PROFILE_PICTURE);
     const submitHandler = () => {
-        if (firstName && lastName && email){
+        if (firstName && lastName && email) {
         }
 
     }
     const disableSubmit = () => {
-        if (firstName && lastName && email){
+        if (firstName && lastName && email) {
             return false;
         }
         return true;
@@ -87,57 +86,57 @@ const EditUser: React.FC = () => {
                                     <IonCardTitle>Edit Account</IonCardTitle>
                                 </IonCardHeader>
                                 <form onSubmit={() => submitHandler()}>
-                                <IonList>
-                                    <IonItem>
-                                    <IonLabel position="floating">Profile Picture</IonLabel>
-                                    <IonButton
-                                        className="ion-float-left"
-                                        fill="clear"
-                                        color="medium"
-                                        onClick={takePhoto}
-                                    >
-                                        <IonIcon slot="icon-only" icon={camera} />
+                                    <IonList>
+                                        <IonItem>
+                                            <IonLabel position="floating">Profile Picture</IonLabel>
+                                            <IonButton
+                                                className="ion-float-left"
+                                                fill="clear"
+                                                color="medium"
+                                                onClick={takePhoto}
+                                            >
+                                                <IonIcon slot="icon-only" icon={camera} />
+                                            </IonButton>
+                                            <IonButton
+                                                onClick={() => {
+                                                    handleUpdateProfilePicture(context, photos, editUser);
+                                                }}
+                                            >
+                                                submit
                                     </IonButton>
-                                    <IonButton
-                                        onClick={() => {
-                                            handleUpdateProfilePicture(context, photos, editUser);
-                                        }}
-                                    >
-                                        submit
-                                    </IonButton>
-                                    </IonItem>
-                                    <IonItem>
-                                        <IonLabel position="floating">First Name</IonLabel>
-                                        <IonInput 
-                                        value={firstName} 
-                                        placeholder="Andre"
-                                        onIonChange={e => setFirstName(e.detail.value!)}
-                                        />
-                                    </IonItem>
-                                    <IonItem>
-                                        <IonLabel position="floating">Last Name</IonLabel>
-                                        <IonInput 
-                                            value={lastName} 
-                                            placeholder="Zekic"
-                                            onIonChange={e => setLastName(e.detail.value!)}
+                                        </IonItem>
+                                        <IonItem>
+                                            <IonLabel position="floating">First Name</IonLabel>
+                                            <IonInput
+                                                value={firstName}
+                                                placeholder="Andre"
+                                                onIonChange={e => setFirstName(e.detail.value!)}
+                                            />
+                                        </IonItem>
+                                        <IonItem>
+                                            <IonLabel position="floating">Last Name</IonLabel>
+                                            <IonInput
+                                                value={lastName}
+                                                placeholder="Zekic"
+                                                onIonChange={e => setLastName(e.detail.value!)}
 
-                                        />
-                                    </IonItem>
-                                    <IonItem lines="none">
-                                        <IonLabel position="floating">Email</IonLabel>
-                                        <IonInput 
-                                            value={email} 
-                                            type="email" 
-                                            placeholder="andrezekic@me.com"
-                                            onIonChange={e => setEmail(e.detail.value!)}
-                                        />
-                                    </IonItem>
-                                    <IonItem lines="none">
-                                        <IonButton disabled={disableSubmit()} type="submit">
-                                            <IonLabel>Save</IonLabel>
-                                        </IonButton>
-                                    </IonItem>
-                                </IonList>
+                                            />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel position="floating">Email</IonLabel>
+                                            <IonInput
+                                                value={email}
+                                                type="email"
+                                                placeholder="andrezekic@me.com"
+                                                onIonChange={e => setEmail(e.detail.value!)}
+                                            />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonButton disabled={disableSubmit()} type="submit">
+                                                <IonLabel>Save</IonLabel>
+                                            </IonButton>
+                                        </IonItem>
+                                    </IonList>
                                 </form>
                             </IonCard>
                             <IonCard>

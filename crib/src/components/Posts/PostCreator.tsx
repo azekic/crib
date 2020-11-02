@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import { IonItem, IonTextarea, IonButton, IonIcon, IonImg } from '@ionic/react';
 import { camera, videocam, documentAttach, send } from 'ionicons/icons';
 import { usePhotoGallery, Photo } from '../../hooks/usePhotoGallery';
-import AuthContext, {ContextProps} from '../../context/auth-context';
+import AuthContext, { ContextProps } from '../../context/auth-context';
 import UserAvatar from '../UserAvatar';
 import './PostCreator.css';
 import { gql, useMutation } from '@apollo/client';
-import {CREATE_POST} from '../../graphql/mutations';
+import { CREATE_POST } from '../../graphql/mutations';
 
 type PostProps = {
     name: string
@@ -17,65 +17,64 @@ type PostProps = {
 }
 
 function handleCreatePost(
-    context: ContextProps, 
-    body: string, 
-    mergedPhotos: Photo[], 
+    context: ContextProps,
+    body: string,
+    mergedPhotos: Photo[],
     createPost: any
-    )
-    {
-    if (body.trim().length === 0){
-      return;
-  }
-  if (mergedPhotos.length !== 0) {
-    const formData = new FormData();
-    
-    mergedPhotos.forEach((photo) => {
-      formData.append("file", photo.blob);
-      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY ?? "");
-      formData.append("api_secret", process.env.REACT_APP_CLOUDINARY_API_SECRET ?? "");
-      formData.append("upload_preset", "crib_upload");
-      }
-    )
-     fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/upload`, {
-         method: "POST",
-         body: formData
-     }).then(res => {
-          if (res.status !== 200 && res.status !== 201) {
-              throw new Error('Failed!');
-          }
-          return res.json();
-      })
-     .then((resData) => {
-        var imgUrls : String[] = [resData.url];
-         createPost({
-            variables: { 
-                body: body, 
-                imgUrls: imgUrls
-             },
-             context: {
-                 headers: {
-                     Authorization: 'Bearer ' + context.token
-                 }
-             }
-         });
-     });
-     
-  } else {
-    createPost({
-        variables: { 
-            body: body, 
-         },
-         context: {
-             headers: {
-                 Authorization: 'Bearer ' + context.token
-             }
-         }
-     });
-  }
+) {
+    if (body.trim().length === 0) {
+        return;
+    }
+    if (mergedPhotos.length !== 0) {
+        const formData = new FormData();
+
+        mergedPhotos.forEach((photo) => {
+            formData.append("file", photo.blob);
+            formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY ?? "");
+            formData.append("api_secret", process.env.REACT_APP_CLOUDINARY_API_SECRET ?? "");
+            formData.append("upload_preset", "crib_upload");
+        }
+        )
+        fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/upload`, {
+            method: "POST",
+            body: formData
+        }).then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed!');
+            }
+            return res.json();
+        })
+            .then((resData) => {
+                var imgUrls: String[] = [resData.url];
+                createPost({
+                    variables: {
+                        body: body,
+                        imgUrls: imgUrls
+                    },
+                    context: {
+                        headers: {
+                            Authorization: 'Bearer ' + context.token
+                        }
+                    }
+                });
+            });
+
+    } else {
+        createPost({
+            variables: {
+                body: body,
+            },
+            context: {
+                headers: {
+                    Authorization: 'Bearer ' + context.token
+                }
+            }
+        });
+    }
 
 }
 
-const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos}: PostProps) => {
+const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos }: PostProps) => {
     const [text, setText] = useState<string>();
     const { photos, takePhoto } = usePhotoGallery();
     const context = useContext(AuthContext);
@@ -84,7 +83,7 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos}: P
         update(cache, { data: { createPost } }) {
             cache.modify({
                 fields: {
-                    posts(existingPosts = []){
+                    posts(existingPosts = []) {
                         const newPostRef = cache.writeFragment({
                             data: createPost,
                             fragment: gql`
@@ -108,8 +107,8 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos}: P
             })
         }
     });
-    
-    
+
+
     return (
         <React.Fragment>
             <IonItem lines="none">
@@ -168,9 +167,9 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos}: P
                 <IonIcon slot="icon-only" icon={send} />
             </IonButton>
 
-                    {mergedPhotos.map((photo, index) => (
-                            <IonImg src={photo.webviewPath} key={index}/>
-                    ))}
+            {mergedPhotos.map((photo, index) => (
+                <IonImg src={photo.webviewPath} key={index} />
+            ))}
         </React.Fragment>
     );
 };

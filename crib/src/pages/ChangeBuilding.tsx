@@ -14,13 +14,13 @@ const ChangeBuilding = () => {
                 <IonToolbar>
                     <IonTitle>Change Building</IonTitle>
                     <IonLabel>
-                        
+
                     </IonLabel>
                 </IonToolbar>
                 <IonToolbar>
-                <IonTitle size="small">
-                    {currentBuilding}
-                </IonTitle>
+                    <IonTitle size="small">
+                        {currentBuilding}
+                    </IonTitle>
                 </IonToolbar>
                 <IonToolbar>
                     <IonSearchbar

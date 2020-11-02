@@ -6,10 +6,10 @@ import AuthContext from '../../../../context/auth-context';
 // import Truncate from 'react-truncate';
 import './PostItem.css';
 import { useMutation } from '@apollo/client';
-import {Like, Comment} from '../../../../models';
+import { Like, Comment } from '../../../../models';
 import CommentCreator from '../../../Comments/CommentCreator';
 import CommentList from '../../../Comments/CommentList';
-import {LIKE_POST, UNLIKE_POST} from '../../../../graphql/mutations';
+import { LIKE_POST, UNLIKE_POST } from '../../../../graphql/mutations';
 import PostItemActions from './PostItemActions';
 
 type PostProps = {
@@ -31,15 +31,15 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
     return likes.find(l => l.user._id === context.userId);
   };
   const [likeButtonValues, setLikeButtonValues] =
-  useState((getUserLike(likes) === undefined) ? {
+    useState((getUserLike(likes) === undefined) ? {
       color: "medium",
       text: "Like",
       likeCount: likes.length
     } : {
-      color: "primary",
-      text: "Liked",
-      likeCount: likes.length
-    });
+        color: "primary",
+        text: "Liked",
+        likeCount: likes.length
+      });
 
   //const [truncated, handleTruncate] = useState(true);
   const [likePost] = useMutation(LIKE_POST);
@@ -57,7 +57,7 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
           }
         }
       });
-      setLikeButtonValues({color: "primary", text: "Liked", likeCount: likeButtonValues.likeCount + 1});
+      setLikeButtonValues({ color: "primary", text: "Liked", likeCount: likeButtonValues.likeCount + 1 });
     } else {
       unLikePost({
         variables: {
@@ -69,7 +69,7 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
           }
         }
       });
-      setLikeButtonValues({color: "medium", text: "Like", likeCount: likeButtonValues.likeCount - 1});
+      setLikeButtonValues({ color: "medium", text: "Like", likeCount: likeButtonValues.likeCount - 1 });
     }
   };
   var noLikes = likeButtonValues.likeCount === 0;
@@ -128,8 +128,8 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
               {comments.length} Comments
           </IonButton>
           </IonItem>
-          <CommentList comments={comments}/>
-          <CommentCreator postId={postId}/>
+          <CommentList comments={comments} />
+          <CommentCreator postId={postId} />
         </IonContent>
       </IonModal>
       <IonCard>
@@ -145,9 +145,9 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
           >
             <IonIcon icon={ellipsisHorizontal} />
           </IonButton>
-          <PostItemActions 
-            postId={postId} 
-            showActionSheet={showActionSheet} 
+          <PostItemActions
+            postId={postId}
+            showActionSheet={showActionSheet}
             setShowActionSheet={setShowActionSheet}
           />
           <IonItem lines="none">
@@ -157,7 +157,7 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
         {images && images.length > 0 && <img width="100%" src={images[0]} alt="Post" />}
         <IonCardContent>
           <IonText color="dark">
-          {/* { <Truncate lines={truncated && 4} ellipsis={
+            {/* { <Truncate lines={truncated && 4} ellipsis={
               <span> 
                 <button 
                   onClick={() => handleTruncate(false)} 
@@ -172,23 +172,23 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
           </IonText>
         </IonCardContent>
         <IonItem lines="none">
-        { likeButtonValues.likeCount !== 0 &&
-          <IonButton disabled color="dark" fill="clear" class="ion-margin-end">
-            <IonIcon slot="start" icon={thumbsUp} />
-            {likeButtonValues.likeCount}
-          </IonButton>
-        }
-        { !noComments &&
-          <IonButton
-            color="medium"
-            fill="clear"
-            onClick={() => {
-              setShowCommentsModal(true);
-            }}
-          >
-            {comments.length + commentsName}
-          </IonButton>
-        }
+          {likeButtonValues.likeCount !== 0 &&
+            <IonButton disabled color="dark" fill="clear" class="ion-margin-end">
+              <IonIcon slot="start" icon={thumbsUp} />
+              {likeButtonValues.likeCount}
+            </IonButton>
+          }
+          {!noComments &&
+            <IonButton
+              color="medium"
+              fill="clear"
+              onClick={() => {
+                setShowCommentsModal(true);
+              }}
+            >
+              {comments.length + commentsName}
+            </IonButton>
+          }
         </IonItem>
 
         <IonItem>
@@ -227,12 +227,12 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
         </IonItem>
         {
         }
-        { noLikes && noComments &&
+        {noLikes && noComments &&
           <IonItem>
             <IonCardSubtitle>
-            {firstReactText}
+              {firstReactText}
             </IonCardSubtitle>
-        </IonItem>
+          </IonItem>
         }
       </IonCard>
     </React.Fragment>
