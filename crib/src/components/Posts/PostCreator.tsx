@@ -160,7 +160,6 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos}: P
                 className="ion-float-right"
                 fill="clear"
                 onClick={() => {
-                    console.log("saving post");
                     handleCreatePost(context, text ?? "", mergedPhotos, createPost);
                     onSubmitAction(false)
                 }

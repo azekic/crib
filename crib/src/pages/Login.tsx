@@ -38,9 +38,6 @@ const Login = ({setTitle}: LoginProps) => {
             password: input.password
           }
         });
-
-        console.log(data);
-
     }
     
     return (

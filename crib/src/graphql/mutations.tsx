@@ -29,7 +29,7 @@ export const DELETE_POST = gql`
       _id
     }
   }
-`
+`;
 
 export const LIKE_POST = gql`
   mutation LikePost($postId: ID!){
@@ -40,7 +40,8 @@ export const LIKE_POST = gql`
       }
     }
   }
-`
+`;
+
 export const UNLIKE_POST = gql`
   mutation UnLikePost($likeId: ID!){
     unLikePost(likeId: $likeId) {
@@ -53,7 +54,7 @@ export const UNLIKE_POST = gql`
       }
     }
   }
-`
+`;
 
 export const CREATE_USER = gql`
     mutation CreateUser($email: String!, $password: String!, $firstName: String!, $lastName: String!){
@@ -64,4 +65,4 @@ export const CREATE_USER = gql`
             lastName
         }
     }
-`
+`;

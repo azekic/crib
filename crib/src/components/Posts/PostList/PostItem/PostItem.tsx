@@ -9,7 +9,8 @@ import { gql, useMutation } from '@apollo/client';
 import {Like, Comment} from '../../../../models';
 import CommentCreator from '../../../Comments/CommentCreator';
 import CommentList from '../../../Comments/CommentList';
-import {LIKE_POST, UNLIKE_POST, DELETE_POST} from '../../../../graphql/mutations';
+import {LIKE_POST, UNLIKE_POST} from '../../../../graphql/mutations';
+import PostItemActions from './PostItemActions';
 
 type PostProps = {
   postId: string,
@@ -43,9 +44,8 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
 
   const [truncated, handleTruncate] = useState(true);
   // eslint-disable-next-line
-  const [likePost, {loading, data: likeData}] = useMutation(LIKE_POST);
+  const [likePost] = useMutation(LIKE_POST);
   const [unLikePost] = useMutation(UNLIKE_POST);
-  const [deletePost] = useMutation(DELETE_POST);
   const toggleLikeHandler = (postId: String) => {
     let userLike = getUserLike(likes);
     if (userLike === undefined) {
@@ -165,47 +165,11 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
           >
             <IonIcon icon={ellipsisHorizontal} />
           </IonButton>
-          <IonActionSheet
-            isOpen={showActionSheet}
-            onDidDismiss={() => setShowActionSheet(false)}
-            buttons={[{
-              text: 'Delete',
-              role: 'destructive',
-              icon: trash,
-              handler: () => {
-                deletePost({
-                  variables: {
-                    postId: postId
-                  },
-                  context: {
-                    headers: {
-                      Authorization: 'Bearer ' + context.token
-                    }
-                  }
-                });
-              }
-            }, {
-              text: 'Share',
-              icon: share,
-              handler: () => {
-                console.log('Share clicked');
-              }
-            }, {
-              text: 'Save',
-              icon: bookmark,
-              handler: () => {
-                console.log('Save clicked');
-              }
-            }, {
-              text: 'Cancel',
-              icon: close,
-              role: 'cancel',
-              handler: () => {
-                console.log('Cancel clicked');
-              }
-            }]}
-          >
-          </IonActionSheet>
+          <PostItemActions 
+            postId={postId} 
+            showActionSheet={showActionSheet} 
+            setShowActionSheet={setShowActionSheet}
+          />
           <IonItem lines="none">
             <UserAvatar profilePicture={profilePicture} unit={unit} name={name} />
           </IonItem>

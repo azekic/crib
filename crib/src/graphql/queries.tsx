@@ -42,4 +42,4 @@ query GetPosts {
         images
     }
   }
-`
+`;
