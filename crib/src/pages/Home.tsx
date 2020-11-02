@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonButtons, IonModal, isPlatform } from '@ionic/react';
 import { create, camera, close, videocam, documentAttach } from 'ionicons/icons';
 import PostList from '../components/Posts/PostList/PostList';

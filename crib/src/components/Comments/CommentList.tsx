@@ -1,7 +1,7 @@
 import React from "react";
 import {Comment} from '../../models';
 import CommentItem from './CommentItem';
-import { IonList, IonItem, IonAvatar, IonCard, IonCardContent } from "@ionic/react";
+import { IonList} from "@ionic/react";
 
 type CommentListProps = {
     comments: Array<Comment>

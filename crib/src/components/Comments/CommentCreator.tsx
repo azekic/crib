@@ -2,7 +2,7 @@ import { IonItem, IonTextarea, IonButton, IonIcon, IonAvatar } from '@ionic/reac
 import { send } from 'ionicons/icons';
 import React, { useContext, useState } from 'react';
 import AuthContext, {ContextProps} from '../../context/auth-context';
-import {gql, useMutation} from '@apollo/client';
+import {useMutation} from '@apollo/client';
 import {ADD_COMMENT} from '../../graphql/mutations';
 
 type CommentCreatorProps = {

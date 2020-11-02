@@ -34,7 +34,7 @@ function handleUpdateProfilePicture(
               formData.append("upload_preset", "crib_upload");
               }
             );
-             fetch('https://api.cloudinary.com/v1_1/${REACT_APP_CLOUDINARY_NAME}/upload', {
+             fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/upload`, {
                  method: "POST",
                  body: formData
              }).then(res => {
@@ -64,7 +64,7 @@ const EditUser: React.FC = () => {
     const { photos, takePhoto } = usePhotoGallery();
     const [number] = useState<number>();
     const context = useContext(AuthContext);
-    const [editUser, {data}] = useMutation(UPDATE_PROFILE_PICTURE);
+    const [editUser] = useMutation(UPDATE_PROFILE_PICTURE);
     const submitHandler = () => {
         if (firstName && lastName && email){
         }

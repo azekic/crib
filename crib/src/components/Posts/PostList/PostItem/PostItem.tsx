@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonActionSheet, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonTextarea, IonList, IonAvatar, IonCardSubtitle } from '@ionic/react';
-import { thumbsUp, chatboxEllipses, ellipsisHorizontal, share, trash, close, bookmark, send, arrowBack, toggle } from 'ionicons/icons';
+import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonModal, IonHeader, IonToolbar, IonButtons, IonContent, IonCardSubtitle } from '@ionic/react';
+import { thumbsUp, chatboxEllipses, ellipsisHorizontal, arrowBack } from 'ionicons/icons';
 import UserAvatar from '../../../UserAvatar';
 import AuthContext from '../../../../context/auth-context';
-import Truncate from 'react-truncate';
+// import Truncate from 'react-truncate';
 import './PostItem.css';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import {Like, Comment} from '../../../../models';
 import CommentCreator from '../../../Comments/CommentCreator';
 import CommentList from '../../../Comments/CommentList';
@@ -26,7 +26,6 @@ type PostProps = {
 const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePicture }: PostProps) => {
   const context = useContext(AuthContext);
   const [showActionSheet, setShowActionSheet] = useState(false);
-  const [addCommentModal, setAddCommentModal] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const getUserLike = (likes: Like[]) => {
     return likes.find(l => l.user._id === context.userId);
@@ -42,8 +41,7 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
       likeCount: likes.length
     });
 
-  const [truncated, handleTruncate] = useState(true);
-  // eslint-disable-next-line
+  //const [truncated, handleTruncate] = useState(true);
   const [likePost] = useMutation(LIKE_POST);
   const [unLikePost] = useMutation(UNLIKE_POST);
   const toggleLikeHandler = (postId: String) => {
@@ -74,9 +72,9 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
       setLikeButtonValues({color: "medium", text: "Like", likeCount: likeButtonValues.likeCount - 1});
     }
   };
-  var noLikes = likeButtonValues.likeCount == 0;
+  var noLikes = likeButtonValues.likeCount === 0;
   var noComments = comments.length === 0;
-  var commentsName = comments.length > 1 ? " Comments" : " Comment";
+  const commentsName = comments.length > 1 ? " Comments" : " Comment";
   const firstReactText = "Be the first to react to this";
 
   return (
@@ -134,24 +132,6 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
           <CommentCreator postId={postId}/>
         </IonContent>
       </IonModal>
-      <IonModal
-        isOpen={addCommentModal}
-        onDidDismiss={() => setAddCommentModal(false)}
-      >
-        <IonHeader translucent>
-          <IonToolbar>
-            <IonButtons slot="primary">
-              <IonButton onClick={() => setAddCommentModal(false)}>
-                <IonIcon slot="icon-only" icon={close} />
-              </IonButton>
-            </IonButtons>
-            <IonTitle>Add a comment</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent fullscreen>
-          <CommentCreator postId={postId}/>
-        </IonContent>
-      </IonModal>
       <IonCard>
         <IonCardHeader className="ion-no-padding">
           <IonButton
@@ -192,7 +172,7 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
           </IonText>
         </IonCardContent>
         <IonItem lines="none">
-        { likeButtonValues.likeCount != 0 &&
+        { likeButtonValues.likeCount !== 0 &&
           <IonButton disabled color="dark" fill="clear" class="ion-margin-end">
             <IonIcon slot="start" icon={thumbsUp} />
             {likeButtonValues.likeCount}
@@ -235,7 +215,7 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
                   fill="clear"
                   expand="full"
                   onClick={() => {
-                    setAddCommentModal(true);
+                    setShowCommentsModal(true);
                   }}
                 >
                   <IonIcon slot="start" icon={chatboxEllipses} />

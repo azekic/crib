@@ -3,7 +3,7 @@ import { IonList, IonItem, IonLabel, IonInput, IonButton } from '@ionic/react';
 import AuthContext from '../context/auth-context';
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { LOGIN_USER } from '../graphql/queries';
 
 type LoginProps = {
