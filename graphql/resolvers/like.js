@@ -1,7 +1,6 @@
 const Post = require('../../models/post');
-const User = require('../../models/user');
 const Like = require('../../models/like');
-const {transformPost, transformLike} = require('./merge');
+const {transformLike} = require('./merge');
 
 module.exports = {
     unLikePost: async (args, req) => {
@@ -49,6 +48,4 @@ module.exports = {
             throw err;
         }
     }
-
-
 }

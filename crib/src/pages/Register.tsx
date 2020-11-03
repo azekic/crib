@@ -1,15 +1,16 @@
 import React from 'react';
-import { IonList, IonItem, IonLabel, IonInput, IonButton } from '@ionic/react';
+import { IonList, IonItem, IonLabel, IonInput, IonButton, IonText } from '@ionic/react';
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_USER } from '../graphql/mutations';
+import { LOGIN_USER } from '../graphql/queries';
 
 type RegisterProps = {
   setTitle: React.Dispatch<React.SetStateAction<string>>
 }
 const Register = ({ setTitle }: RegisterProps) => {
-  const { handleSubmit, control, errors } = useForm();
+  const { handleSubmit, control, errors, getValues } = useForm();
   const [createUser] = useMutation(CREATE_USER);
 
   const submitHandler = (data: { [x: string]: any; }) => {
@@ -28,6 +29,8 @@ const Register = ({ setTitle }: RegisterProps) => {
         lastName: data.lastName
       }
     });
+    setTitle('Login');
+
   }
   return (
     <div className="ion-padding">
@@ -42,16 +45,16 @@ const Register = ({ setTitle }: RegisterProps) => {
               control={control}
               name="firstName"
               rules={{
-                required: "This is a required field",
+                required: "Enter your first name",
               }}
               type="text"
             />
+            <ErrorMessage
+              errors={errors}
+              name="firstName"
+              as={<IonText color="danger" />}
+            />
           </IonItem>
-          <ErrorMessage
-            errors={errors}
-            name="lastName"
-            as={<div style={{ color: "red" }} />}
-          />
           <IonItem>
             <IonLabel position="floating">Last Name</IonLabel>
             <Controller
@@ -61,16 +64,16 @@ const Register = ({ setTitle }: RegisterProps) => {
               control={control}
               name="lastName"
               rules={{
-                required: "This is a required field",
+                required: "Enter your last name",
               }}
               type="text"
             />
+            <ErrorMessage
+              errors={errors}
+              name="lastName"
+              as={<IonText color="danger" />}
+            />
           </IonItem>
-          <ErrorMessage
-            errors={errors}
-            name="lastName"
-            as={<div style={{ color: "red" }} />}
-          />
           <IonItem>
             <IonLabel position="floating">Email</IonLabel>
             <Controller
@@ -80,20 +83,20 @@ const Register = ({ setTitle }: RegisterProps) => {
               control={control}
               name="email"
               rules={{
-                required: "This is a required field",
+                required: "Enter your email",
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                  message: "invalid email address"
+                  message: "Invalid email address"
                 }
               }}
               type="email"
             />
+            <ErrorMessage
+              errors={errors}
+              name="email"
+              as={<IonText color="danger" />}
+            />
           </IonItem>
-          <ErrorMessage
-            errors={errors}
-            name="email"
-            as={<div style={{ color: "red" }} />}
-          />
           <IonItem>
             <IonLabel position="floating">Password</IonLabel>
             <Controller
@@ -104,19 +107,19 @@ const Register = ({ setTitle }: RegisterProps) => {
               control={control}
               name="password"
               rules={{
-                required: "This is a required field",
+                required: "Enter your password",
                 minLength: {
                   value: 5,
-                  message: "min length is 5"
+                  message: "Minimum length is 5 characters"
                 }
               }}
             />
+            <ErrorMessage
+              errors={errors}
+              name="password"
+              as={<IonText color="danger" />}
+            />
           </IonItem>
-          <ErrorMessage
-            errors={errors}
-            name="password"
-            as={<div style={{ color: "red" }} />}
-          />
           <IonItem>
             <IonLabel position="floating">Confirm Password</IonLabel>
             <Controller
@@ -127,20 +130,22 @@ const Register = ({ setTitle }: RegisterProps) => {
               control={control}
               name="confirm-password"
               rules={{
-                required: "This is a required field",
+                required: "Confirm your password",
                 minLength: {
                   value: 5,
-                  message: "min length is 5"
+                  message: "Minimum length is 5 characters"
+                },
+                validate: (value) => {
+                  return value === getValues()["password"] ? true : "The passwords do not match"
                 }
               }}
             />
+            <ErrorMessage
+              errors={errors}
+              name="confirm-password"
+              as={<IonText color="danger" />}
+            />
           </IonItem>
-          <ErrorMessage
-            errors={errors}
-            name="confirm-password"
-            as={<div style={{ color: "red" }} />}
-          />
-
           <IonButton
             type="submit"
             expand="block"
@@ -157,7 +162,7 @@ const Register = ({ setTitle }: RegisterProps) => {
         color="medium"
       >
         Go to Login
-                </IonButton>
+      </IonButton>
 
     </div>
   );

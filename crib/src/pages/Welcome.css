@@ -39,10 +39,11 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
+  padding: 0px 10px;
 }
 
 .card-list {
-  display: flex;
+  /* display: flex; */
   flex-wrap: wrap;
   margin-top: 30px;
   justify-content: space-around;

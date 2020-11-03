@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { IonList, IonItem, IonLabel, IonInput, IonButton } from '@ionic/react';
+import { IonList, IonItem, IonLabel, IonInput, IonButton, IonText } from '@ionic/react';
 import AuthContext from '../context/auth-context';
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
@@ -16,6 +16,7 @@ const Login = ({ setTitle }: LoginProps) => {
   const { login } = useContext(AuthContext);
 
   const [loginUser, { data }] = useLazyQuery(LOGIN_USER);
+  
   useEffect(() => {
     if (data && data.login) {
       login(
@@ -25,7 +26,7 @@ const Login = ({ setTitle }: LoginProps) => {
       localStorage.setItem("token", data.login.token);
       localStorage.setItem("userId", data.login.userId);
     }
-  })
+  });
 
 
   const submitHandler = (input: { [x: string]: any; }) => {
@@ -54,20 +55,20 @@ const Login = ({ setTitle }: LoginProps) => {
               control={control}
               name="email"
               rules={{
-                required: "This is a required field",
+                required: "Enter your email",
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                  message: "invalid email address"
+                  message: "Invalid email address"
                 }
               }}
               type="email"
             />
+            <ErrorMessage
+              errors={errors}
+              name="email"
+              as={<IonText color="danger" />}
+            />
           </IonItem>
-          <ErrorMessage
-            errors={errors}
-            name="email"
-            as={<div style={{ color: "red" }} />}
-          />
           <IonItem>
             <IonLabel position="floating">Password</IonLabel>
             <Controller
@@ -78,19 +79,19 @@ const Login = ({ setTitle }: LoginProps) => {
               control={control}
               name="password"
               rules={{
-                required: "This is a required field",
+                required: "Enter your password",
                 minLength: {
                   value: 5,
-                  message: "min length is 5"
+                  message: "Minimum length is 5 characters"
                 }
               }}
             />
+            <ErrorMessage
+              errors={errors}
+              name="password"
+              as={<IonText color="danger" />}
+            />
           </IonItem>
-          <ErrorMessage
-            errors={errors}
-            name="password"
-            as={<div style={{ color: "red" }} />}
-          />
           <IonButton
             fill="clear"
             size="small"
