@@ -4,6 +4,12 @@
   text-transform: uppercase;
 }
 
+.success-container {
+  overflow: hidden;
+  padding-top: 10px;
+  padding-right: 6px;
+}
+
 .swiper-slide {
   display: block;
 }

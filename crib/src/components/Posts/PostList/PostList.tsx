@@ -12,13 +12,14 @@ const PostList = ({ posts }: PostListProps) => {
             <PostItem
                 key={post._id}
                 postId={post._id}
+                userId={post.author._id}
                 name={post.author.firstName + " " + post.author.lastName}
                 unit="221"
                 likes={post.likes}
                 comments={post.comments}
                 text={post.body}
                 images={post.images}
-                profilePicture={post.author.profilePicture ?? ""}
+                profilePicture={post.author.profilePicture ?? "./img/default-user.png"}
             />
         )
     });

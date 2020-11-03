@@ -18,7 +18,13 @@ import {
   IonModal
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { chatbubblesOutline, personOutline, homeOutline, newspaperOutline, albumsOutline } from 'ionicons/icons';
+import { 
+  //chatbubblesOutline, 
+  personOutline, 
+  //homeOutline, 
+  //newspaperOutline, 
+  albumsOutline 
+} from 'ionicons/icons';
 import Home from './pages/Home';
 import Account from './pages/Account';
 import Messages from './pages/Messages';
@@ -123,10 +129,11 @@ const App = () => {
 
               <IonButtons slot="primary">
                 {authState.token ?
-                  <IonButton routerLink="/messages">
-                    <IonIcon slot="icon-only" icon={chatbubblesOutline} />
+                  // <IonButton routerLink="/messages">
+                  //   <IonIcon slot="icon-only" icon={chatbubblesOutline} />
 
-                  </IonButton>
+                  // </IonButton>
+                  <IonButton onClick={() => logout()} color='medium'>Logout</IonButton>
                   :
                   <React.Fragment>
                     <IonButton onClick={() => setShowLoginModal(true)} color='medium'>Login</IonButton>
@@ -151,8 +158,8 @@ const App = () => {
                 <IonRouterOutlet>
                   <Route path="/home" component={Home} exact={true} />
                   <Redirect from="/welcome" to="/home" />
-                  <Route path="/news" component={News} exact={true} />
-                  <Route path="/mycondo" component={MyCondo} exact={true} />
+                  {/* <Route path="/news" component={News} exact={true} />
+                  <Route path="/mycondo" component={MyCondo} exact={true} /> */}
                   <Route path="/account" component={Account} exact={true} />
                   <Route path="/messages" component={Messages} exact={true} />
                   <Route path="/account/edit" component={EditUser} exact={true} />
@@ -164,14 +171,14 @@ const App = () => {
                     <IonIcon icon={albumsOutline} />
                     <IonLabel>Posts</IonLabel>
                   </IonTabButton>
-                  <IonTabButton tab="news" href="/news" layout={tabsState.tabsLayout}>
+                  {/* <IonTabButton tab="news" href="/news" layout={tabsState.tabsLayout}>
                     <IonIcon icon={newspaperOutline} />
                     <IonLabel>News</IonLabel>
                   </IonTabButton>
                   <IonTabButton tab="messages" href="/mycondo" layout={tabsState.tabsLayout}>
                     <IonIcon icon={homeOutline} />
                     <IonLabel>My Condo</IonLabel>
-                  </IonTabButton>
+                  </IonTabButton> */}
                   <IonTabButton tab="account" href="/account" layout={tabsState.tabsLayout}>
                     <IonIcon icon={personOutline} />
                     <IonLabel>Account</IonLabel>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonList, IonItem, IonLabel, IonInput, IonButton, IonText } from '@ionic/react';
+import { IonList, IonItem, IonLabel, IonInput, IonButton, IonText, IonCard } from '@ionic/react';
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { useMutation, useQuery } from '@apollo/client';
@@ -8,8 +8,9 @@ import { LOGIN_USER } from '../graphql/queries';
 
 type RegisterProps = {
   setTitle: React.Dispatch<React.SetStateAction<string>>
+  setRegisterSuccess: React.Dispatch<React.SetStateAction<boolean>>
 }
-const Register = ({ setTitle }: RegisterProps) => {
+const Register = ({ setTitle, setRegisterSuccess }: RegisterProps) => {
   const { handleSubmit, control, errors, getValues } = useForm();
   const [createUser] = useMutation(CREATE_USER);
 
@@ -29,11 +30,12 @@ const Register = ({ setTitle }: RegisterProps) => {
         lastName: data.lastName
       }
     });
+    setRegisterSuccess(true);
     setTitle('Login');
 
   }
   return (
-    <div className="ion-padding">
+    <IonCard>
       <form onSubmit={handleSubmit(data => submitHandler(data))}>
         <IonList>
           <IonItem>
@@ -164,7 +166,7 @@ const Register = ({ setTitle }: RegisterProps) => {
         Go to Login
       </IonButton>
 
-    </div>
+    </IonCard>
   );
 };
 

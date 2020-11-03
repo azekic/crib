@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { IonContent, IonPage, IonCard, IonList, IonItem, IonLabel, IonCardHeader, IonCardTitle, IonIcon, IonButton, IonToggle, IonGrid, IonRow, IonCol, isPlatform } from '@ionic/react';
 import { moon } from 'ionicons/icons';
 import './Account.css';
+import AuthContext from '../context/auth-context';
 
 const toggleDarkModeHandler = () => {
   document.body.classList.toggle("dark");
@@ -9,6 +10,8 @@ const toggleDarkModeHandler = () => {
 const contentStyle = isPlatform("desktop") ? undefined : "mobile-content";
 
 const Account: React.FC = () => {
+const { logout } = useContext(AuthContext);
+
   return (
     <IonPage>
       <IonContent className={contentStyle}>
@@ -69,12 +72,15 @@ const Account: React.FC = () => {
                 </IonList>
               </IonCard>
               <IonButton
-                routerLink="/login"
                 className="margin-horizontal"
                 expand="block"
                 onClick={() => {
                   localStorage.removeItem("token");
                   localStorage.removeItem("userId");
+                  localStorage.removeItem("firstName");
+                  localStorage.removeItem("lastName");
+                  localStorage.removeItem("profilePicture");
+                  logout();
                 }}
               >
                 Log out

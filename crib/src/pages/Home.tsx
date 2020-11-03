@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonButtons, IonModal, isPlatform } from '@ionic/react';
-import { create, camera, close, videocam, documentAttach } from 'ionicons/icons';
+import { 
+  create, 
+  camera, 
+  close, 
+  //videocam, 
+  //documentAttach 
+} from 'ionicons/icons';
 import PostList from '../components/Posts/PostList/PostList';
 import PostCreator from '../components/Posts/PostCreator';
 import { usePhotoGallery } from '../hooks/usePhotoGallery';
@@ -44,9 +50,7 @@ const Home: React.FC = () => {
         </IonHeader>
         <IonContent fullscreen>
           <PostCreator
-            name="Andre Zekic"
             unit="221"
-            profilePicture={""}
             onSubmitAction={setShowCreatePostModal}
             newPhotos={photos}
           />
@@ -61,12 +65,12 @@ const Home: React.FC = () => {
                   <IonIcon slot="start" icon={create} />
                   <div>Create a post</div>
                 </IonButton>
-                <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => console.log("documentAttach clicked")}>
+                {/* <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => console.log("documentAttach clicked")}>
                   <IonIcon slot="icon-only" icon={documentAttach} />
                 </IonButton>
                 <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => console.log("videocam clicked")}>
                   <IonIcon slot="icon-only" icon={videocam} />
-                </IonButton>
+                </IonButton> */}
                 <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => cameraHandler()}>
                   <IonIcon slot="icon-only" icon={camera} />
                 </IonButton>

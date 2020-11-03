@@ -84,7 +84,7 @@ type Unit {
 }
 
 type AuthData {
-    userId: ID!
+    user: User!
     token: String!
     tokenExpiration: Int!
 }

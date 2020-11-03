@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonButton, isPlatform, IonCardHeader, IonList, IonCard, IonCardTitle, IonCardContent, IonModal } from '@ionic/react';
+import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonButton, isPlatform, IonCardHeader, IonList, IonCard, IonCardTitle, IonCardContent, IonModal, IonText, IonCardSubtitle } from '@ionic/react';
 import './Welcome.css';
 import Auth from './Auth';
 
@@ -49,6 +49,7 @@ const Welcome: React.FC = () => {
                 <IonCard>
                   <IonCardHeader>
                     <IonCardTitle>Ping neighbours privately</IonCardTitle>
+                    <IonCardSubtitle>Coming Soon</IonCardSubtitle>
                   </IonCardHeader>
                   <IonCardContent>
                     Send a private notification to a nearby neighbour if they are being too loud.
@@ -57,6 +58,7 @@ const Welcome: React.FC = () => {
                 <IonCard>
                   <IonCardHeader>
                     <IonCardTitle>Send repair requests</IonCardTitle>
+                    <IonCardSubtitle>Coming Soon</IonCardSubtitle>
                   </IonCardHeader>
                   <IonCardContent>
                     Let your property manager know when your condo or a shared facility needs repairs done.

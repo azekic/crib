@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { IonHeader, IonToolbar, IonButtons, IonButton, IonIcon, IonTitle, IonContent } from '@ionic/react';
-import { close } from 'ionicons/icons';
+import { IonHeader, IonToolbar, IonButtons, IonButton, IonIcon, IonTitle, IonContent, IonCard, IonCardTitle, IonCardContent, IonCardHeader, IonText, IonChip, IonLabel } from '@ionic/react';
+import { close, pin } from 'ionicons/icons';
 import Login from './Login';
 import Register from './Register';
 
@@ -11,7 +11,7 @@ type AuthProps = {
 }
 const Auth = ({ title, setShowModal }: AuthProps) => {
   const [modalTitle, setTitle] = useState(title);
-
+  const [registerSuccess, setRegisterSuccess] = useState(false);
   return (
     <React.Fragment>
       <IonHeader translucent>
@@ -26,7 +26,15 @@ const Auth = ({ title, setShowModal }: AuthProps) => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {modalTitle === 'Login' ? <Login setTitle={setTitle} /> : <Register setTitle={setTitle} />}
+      {registerSuccess &&
+        <div className='success-container' onClick={() => setRegisterSuccess(false)}>
+        <IonChip color='success' class='ion-float-end'>
+        <IonLabel>Registration Successful</IonLabel>
+        <IonIcon icon={close} />
+      </IonChip>
+      </div>
+      }
+        {modalTitle === 'Login' ? <Login setTitle={setTitle}/> : <Register setTitle={setTitle} setRegisterSuccess={setRegisterSuccess}/>}
       </IonContent>
     </React.Fragment>
   )

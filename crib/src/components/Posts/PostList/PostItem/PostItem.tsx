@@ -14,6 +14,7 @@ import PostItemActions from './PostItemActions';
 
 type PostProps = {
   postId: string,
+  userId: string,
   name: string,
   unit: string,
   likes: Like[],
@@ -23,7 +24,7 @@ type PostProps = {
   profilePicture: string
 }
 
-const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePicture }: PostProps) => {
+const PostItem = ({ postId, userId, name, unit, likes, comments, text, images, profilePicture }: PostProps) => {
   const context = useContext(AuthContext);
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
@@ -146,6 +147,7 @@ const PostItem = ({ postId, name, unit, likes, comments, text, images, profilePi
             <IonIcon icon={ellipsisHorizontal} />
           </IonButton>
           <PostItemActions
+            userId={userId}
             postId={postId}
             showActionSheet={showActionSheet}
             setShowActionSheet={setShowActionSheet}

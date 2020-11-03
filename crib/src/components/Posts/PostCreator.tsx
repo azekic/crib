@@ -1,6 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { IonItem, IonTextarea, IonButton, IonIcon, IonImg } from '@ionic/react';
-import { camera, videocam, documentAttach, send } from 'ionicons/icons';
+import { 
+    camera, 
+    //videocam, 
+    //documentAttach, 
+    send 
+} from 'ionicons/icons';
 import { usePhotoGallery, Photo } from '../../hooks/usePhotoGallery';
 import AuthContext, { ContextProps } from '../../context/auth-context';
 import UserAvatar from '../UserAvatar';
@@ -9,9 +14,7 @@ import { gql, useMutation } from '@apollo/client';
 import { CREATE_POST } from '../../graphql/mutations';
 
 type PostProps = {
-    name: string
     unit: string
-    profilePicture: string
     onSubmitAction: React.Dispatch<React.SetStateAction<boolean>>
     newPhotos: Photo[]
 }
@@ -74,11 +77,12 @@ function handleCreatePost(
 
 }
 
-const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos }: PostProps) => {
+const PostCreator = ({ unit, onSubmitAction, newPhotos }: PostProps) => {
     const [text, setText] = useState<string>();
     const { photos, takePhoto } = usePhotoGallery();
     const context = useContext(AuthContext);
     const mergedPhotos = photos.concat(newPhotos);
+    const profilePicture = localStorage.getItem("profilePicture") ?? './img/default-user.png';
     const [createPost] = useMutation(CREATE_POST, {
         update(cache, { data: { createPost } }) {
             cache.modify({
@@ -113,11 +117,12 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos }: 
         <React.Fragment>
             <IonItem lines="none">
                 <UserAvatar
-                    name={name}
+                    name={localStorage.getItem("firstName") + " " + localStorage.getItem("lastName")}
                     unit={unit}
                     profilePicture={profilePicture}
                 />
             </IonItem>
+            {console.log(localStorage.getItem("profilePicture"))}
             <IonItem>
                 <IonTextarea
                     className="post-text-box"
@@ -140,7 +145,7 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos }: 
             >
                 <IonIcon slot="icon-only" icon={camera} />
             </IonButton>
-            <IonButton
+            {/* <IonButton
                 className="ion-float-left"
                 fill="clear"
                 color="medium"
@@ -154,7 +159,7 @@ const PostCreator = ({ name, unit, profilePicture, onSubmitAction, newPhotos }: 
                 onClick={() => console.log("documentAttach clicked")}
             >
                 <IonIcon slot="icon-only" icon={documentAttach} />
-            </IonButton>
+            </IonButton> */}
             <IonButton
                 className="ion-float-right"
                 fill="clear"

@@ -1,30 +1,32 @@
 import React, { useContext, useEffect } from 'react';
-import { IonList, IonItem, IonLabel, IonInput, IonButton, IonText } from '@ionic/react';
+import { IonList, IonItem, IonLabel, IonInput, IonButton, IonText, IonCard } from '@ionic/react';
 import AuthContext from '../context/auth-context';
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery} from '@apollo/client';
 import { LOGIN_USER } from '../graphql/queries';
 
 type LoginProps = {
   setTitle: React.Dispatch<React.SetStateAction<string>>
-
 }
 
 const Login = ({ setTitle }: LoginProps) => {
   const { handleSubmit, control, errors } = useForm();
   const { login } = useContext(AuthContext);
 
-  const [loginUser, { data }] = useLazyQuery(LOGIN_USER);
-  
+  const [loginUser, { data, error }] = useLazyQuery(LOGIN_USER);
+
   useEffect(() => {
     if (data && data.login) {
       login(
         data.login.token,
-        data.login.userId,
+        data.login.user._id,
       );
       localStorage.setItem("token", data.login.token);
-      localStorage.setItem("userId", data.login.userId);
+      localStorage.setItem("userId", data.login.user._id);
+      localStorage.setItem("firstName", data.login.user.firstName);
+      localStorage.setItem("lastName", data.login.user.lastName);
+      localStorage.setItem("profilePicture", data.login.user.profilePicture ?? './img/default-user.png');
     }
   });
 
@@ -40,10 +42,13 @@ const Login = ({ setTitle }: LoginProps) => {
       }
     });
   }
+  if (error) {
+    console.log(error);
+  }
 
   return (
 
-    <div className="ion-padding">
+    <IonCard>
       <form onSubmit={handleSubmit(input => submitHandler(input))}>
         <IonList>
           <IonItem>
@@ -117,7 +122,7 @@ const Login = ({ setTitle }: LoginProps) => {
       >
         Create an account
             </IonButton>
-    </div>
+    </IonCard>
   );
 };
 

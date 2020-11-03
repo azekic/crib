@@ -34,11 +34,12 @@ const CommentCreator = ({ postId }: CommentCreatorProps) => {
     const [commentText, setCommentText] = useState<string>();
     const [addComment] = useMutation(ADD_COMMENT);
     const context = useContext(AuthContext);
+    var profilePicture = localStorage.getItem("profilePicture") ?? './img/default-user.png';
     return (
         <React.Fragment>
             <IonItem lines="none">
                 <IonAvatar slot="start">
-                    <img src={""} alt="Profile" />
+                    <img src={profilePicture} alt="Profile" />
                 </IonAvatar>
                 <IonTextarea
                     autofocus
