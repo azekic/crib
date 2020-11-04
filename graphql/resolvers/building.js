@@ -1,4 +1,6 @@
 const Building = require('../../models/building');
+const User = require('../../models/user');
+const { transformUser } = require('./merge');
 
 module.exports = {
      buildings: async () => {
@@ -10,6 +12,24 @@ module.exports = {
         }
     },
     
+    setBuilding: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
+        const building = await Building.findById(args.buildingId);
+
+        if (!building) {
+            throw new Error("Building not found");
+        }
+
+        const user = await User.findOneAndUpdate(
+            {_id: req.userId},
+            {building: args.buildingId}
+        );
+
+        return transformUser(user);
+    },
+
     addBuilding: async (args, req) => {
         if (!req.isAuth) {
             throw new Error('Unauthenticated!');

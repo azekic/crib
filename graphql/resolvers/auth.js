@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
+const { transformUser } = require('./merge');
 const { AuthenticationError } = require('apollo-server');
 module.exports = {
 
@@ -38,10 +39,11 @@ module.exports = {
     },
 
     login: async ({email, password}) => {
-        const user = await User.findOne({email: email});
-        if (!user) {
+        const fetchedUser = await User.findOne({email: email});
+        if (!fetchedUser) {
             throw new AuthenticationError('User does not exist');
         }
+        const user = fetchedUser.building == null ? transformUser(fetchedUser) : fetchedUser;
         const isEqual = await bcrypt.compare(password, user.password);
         if (!isEqual) {
             throw new AuthenticationError('Password is incorrect')
@@ -52,6 +54,7 @@ module.exports = {
                 expiresIn: '1h'
             }
         );
-        return { user: user, token: token, tokenExpiration: 1,  };
+        
+        return { user: transformUser(user), token: token, tokenExpiration: 1,  };
     }
 };

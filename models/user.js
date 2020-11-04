@@ -17,6 +17,10 @@ const userSchema = new Schema({
             ref: 'Post'
         }
     ],
+    building: {
+        type: Schema.Types.ObjectId,
+        ref: 'Building'
+    },
     unit: {
         type: Schema.Types.ObjectId,
         ref: 'Unit'

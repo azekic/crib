@@ -18,13 +18,12 @@ module.exports = {
             throw err;
         }
     },
-
     addUnit: async (args, req) => {
 
         if (!req.isAuth) {
             throw new Error('Unauthenticated!');
         }
-        const fetchedBuilding = await Building.findOne({_id: args.unitInput.buildingId});
+        const fetchedBuilding = await Building.findById(args.unitInput.buildingId);
         if (!fetchedBuilding) {
             throw new Error("Building not found");
         }
@@ -43,12 +42,12 @@ module.exports = {
             occupant: req.userId
         });
 
-        const fetchedUser = await User.findOne({_id: req.userId});
+        const fetchedUser = await User.findById(req.userId);
         const prevUnit = fetchedUser.unit;
 
         try {
             if (prevUnit) {
-                await Unit.findByIdAndDelete({_id: prevUnit._id});
+                await Unit.findByIdAndDelete(prevUnit._id);
             }
             fetchedUser.unit = unit;
             await fetchedUser.save();

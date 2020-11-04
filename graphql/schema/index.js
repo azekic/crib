@@ -35,7 +35,8 @@ type User {
     email: String!
     password: String
     createdPosts: [Post!]
-    unit: Unit!
+    building: Building
+    unit: Unit
     firstName: String!
     lastName: String!
     profilePicture: String
@@ -163,6 +164,7 @@ type RootMutation {
     updateProfilePicture(updateProfilePictureInput: UpdateProfilePictureInput): User
     addUnit(unitInput: UnitInput): Unit!
     addBuilding(buildingInput: BuildingInput): Building
+    setBuilding(buildingId: ID!): User!
     addComment(commentInput: CommentInput): Comment!
     unLikePost(likeId: ID!): Post!
     likePost(postId: ID!): Like!

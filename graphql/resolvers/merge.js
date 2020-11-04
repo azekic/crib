@@ -91,7 +91,7 @@ const singlePost = async postId => {
 const singleUnit = async unitId => {
     try {
         const unit = await unitLoader.load(unitId.toString());
-        return unitId;
+        return unit;
     } catch (err) {
             throw err;
         }
@@ -163,10 +163,19 @@ const transformUnit = unit => {
      };
 };
 
+const transformUser = user => {
+    return { 
+        ...user._doc, 
+        building: singleBuilding.bind(this, user._doc.building._id),
+        unit: singleUnit.bind(this, user._doc.unit._id)
+     };
+};
+
 exports.transformComment = transformComment;
 exports.transformPost = transformPost;
 exports.transformUnit = transformUnit;
 exports.transformLike = transformLike;
+exports.transformUser = transformUser;
 
 //exports.user = user;
 //exports.posts = posts;
