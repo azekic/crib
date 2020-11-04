@@ -8,7 +8,7 @@ import {
 } from 'ionicons/icons';
 import { usePhotoGallery, Photo } from '../../hooks/usePhotoGallery';
 import AuthContext, { ContextProps } from '../../context/auth-context';
-import UserAvatar from '../UserAvatar';
+import UserAvatar from '../User/UserAvatar';
 import './PostCreator.css';
 import { gql, useMutation } from '@apollo/client';
 import { CREATE_POST } from '../../graphql/mutations';
@@ -122,7 +122,6 @@ const PostCreator = ({ unit, onSubmitAction, newPhotos }: PostProps) => {
                     profilePicture={profilePicture}
                 />
             </IonItem>
-            {console.log(localStorage.getItem("profilePicture"))}
             <IonItem>
                 <IonTextarea
                     className="post-text-box"

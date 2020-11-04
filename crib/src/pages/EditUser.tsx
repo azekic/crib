@@ -1,17 +1,18 @@
 import React, { useContext, useState } from 'react';
-import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonList, IonItem, IonLabel, IonButton, IonInput, IonIcon } from '@ionic/react';
+import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonList, IonItem, IonLabel, IonButton, IonInput, IonIcon, IonAvatar, IonButtons, IonHeader, IonModal, IonTitle, IonToolbar, IonImg } from '@ionic/react';
 import { usePhotoGallery, Photo } from '../hooks/usePhotoGallery';
 import AuthContext from '../context/auth-context';
-import { gql, useMutation } from '@apollo/client';
-import { camera } from 'ionicons/icons';
+import { useMutation } from '@apollo/client';
+import { close } from 'ionicons/icons';
+import {UPDATE_PROFILE_PICTURE} from '../graphql/mutations';
 
-const UPDATE_PROFILE_PICTURE = gql`
-    mutation UpdateProfilePicture($profilePicture: String!){
-        updateProfilePicture(updateProfilePictureInput: {profilePicture: $profilePicture}) {
-            profilePicture
-        }
-    }
-`;
+const userData = {
+    firstName: localStorage.getItem("firstName"),
+    lastName: localStorage.getItem("lastName"),
+    email: localStorage.getItem("email"),
+    unit: localStorage.getItem("unit") != null ? "Unit " + localStorage.getItem("unit") : "No Unit",
+    building: localStorage.getItem("building") ?? "No Building"
+};
 
 type ContextProps = {
     token: string | null,
@@ -53,6 +54,7 @@ function handleUpdateProfilePicture(
                         }
                     }
                 });
+                localStorage.setItem("profilePicture", resData.url)
             });
     }
 }
@@ -60,6 +62,7 @@ const EditUser: React.FC = () => {
     const [firstName, setFirstName] = useState<string>();
     const [lastName, setLastName] = useState<string>();
     const [email, setEmail] = useState<string>();
+    const [showPictureModal, setShowPictureModal] = useState(false);
     const { photos, takePhoto } = usePhotoGallery();
     const [number] = useState<number>();
     const context = useContext(AuthContext);
@@ -75,8 +78,44 @@ const EditUser: React.FC = () => {
         }
         return true;
     }
+    const cameraHandler = () => {
+        takePhoto()
+        setShowPictureModal(true);
+    }
+
     return (
         <IonPage>
+            <IonModal
+                isOpen={showPictureModal}
+                onDidDismiss={() => setShowPictureModal(false)}
+            >
+                <IonHeader translucent>
+                    <IonToolbar>
+                        <IonButtons slot="primary">
+                            <IonButton onClick={() => setShowPictureModal(false)}>
+                                <IonIcon slot="icon-only" icon={close} />
+                            </IonButton>
+                        </IonButtons>
+                        <IonTitle>Edit Profile Picture</IonTitle>
+
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent fullscreen>
+                    {photos.map((photo, index) => (
+                        <IonImg src={photo.webviewPath} key={index} />
+                    ))}
+            <IonButton
+                class="ion-margin"
+                expand="block"
+                onClick={() => {
+                    handleUpdateProfilePicture(context, photos, editUser);
+                    setShowPictureModal(false);
+                }}
+              >
+                Save
+                </IonButton>
+                </IonContent>
+            </IonModal>
             <IonContent>
                 <IonGrid fixed className="ion-no-padding">
                     <IonRow>
@@ -87,37 +126,24 @@ const EditUser: React.FC = () => {
                                 </IonCardHeader>
                                 <form onSubmit={() => submitHandler()}>
                                     <IonList>
-                                        <IonItem>
-                                            <IonLabel position="floating">Profile Picture</IonLabel>
-                                            <IonButton
-                                                className="ion-float-left"
-                                                fill="clear"
-                                                color="medium"
-                                                onClick={takePhoto}
-                                            >
-                                                <IonIcon slot="icon-only" icon={camera} />
-                                            </IonButton>
-                                            <IonButton
-                                                onClick={() => {
-                                                    handleUpdateProfilePicture(context, photos, editUser);
-                                                }}
-                                            >
-                                                submit
-                                    </IonButton>
+                                        <IonItem lines="none">
+                                            <IonAvatar class="pointer-cursor" onClick={cameraHandler}>
+                                                <img src={localStorage.getItem("profilePicture") ?? ""} alt="Profile" />
+                                            </IonAvatar>
                                         </IonItem>
-                                        <IonItem>
+                                        <IonItem lines="none">
                                             <IonLabel position="floating">First Name</IonLabel>
                                             <IonInput
                                                 value={firstName}
-                                                placeholder="Andre"
+                                                placeholder={userData.firstName ?? "No First Name"}
                                                 onIonChange={e => setFirstName(e.detail.value!)}
                                             />
                                         </IonItem>
-                                        <IonItem>
+                                        <IonItem lines="none">
                                             <IonLabel position="floating">Last Name</IonLabel>
                                             <IonInput
                                                 value={lastName}
-                                                placeholder="Zekic"
+                                                placeholder={userData.lastName ?? "No Last Name"}
                                                 onIonChange={e => setLastName(e.detail.value!)}
 
                                             />
@@ -127,7 +153,7 @@ const EditUser: React.FC = () => {
                                             <IonInput
                                                 value={email}
                                                 type="email"
-                                                placeholder="andrezekic@me.com"
+                                                placeholder={userData.email ?? "No Email"}
                                                 onIonChange={e => setEmail(e.detail.value!)}
                                             />
                                         </IonItem>
@@ -141,40 +167,32 @@ const EditUser: React.FC = () => {
                             </IonCard>
                             <IonCard>
                                 <IonCardHeader>
-                                    <IonCardTitle>Change Unit Number</IonCardTitle>
+                                    <IonCardTitle>Edit Location</IonCardTitle>
                                 </IonCardHeader>
                                 <IonList>
                                     <IonItem lines="none">
-                                        <IonLabel position="floating">Unit Number</IonLabel>
-                                        <IonInput type="number" value={number} placeholder="123"></IonInput>
+                                        <IonLabel>
+                                        <h3>Unit</h3>
+                                        <h2>{userData.unit}</h2>
+                                            </IonLabel>
+                                        <IonButton
+                                            routerLink="/account/edit/unit"
+                                        >
+                                        <IonLabel>Change Unit</IonLabel>
+                                    </IonButton>
                                     </IonItem>
                                     <IonItem lines="none">
-                                        <IonButton disabled>
-                                            <IonLabel>Save</IonLabel>
-                                        </IonButton>
-                                    </IonItem>
-                                </IonList>
-                            </IonCard>
-                            <IonCard>
-                                <IonCardHeader>
-                                    <IonCardTitle>Change Building</IonCardTitle>
-                                </IonCardHeader>
-                                <IonItem lines="none">
                                     <IonLabel>
                                         <h3>Current Building</h3>
-                                        <h2>15 Jacksway Cres</h2>
+                                        <h2>{userData.building}</h2>
                                     </IonLabel>
-                                </IonItem>
-                                <IonItem>
                                     <IonButton
-                                        expand="block"
                                         routerLink="/account/edit/building"
                                     >
-                                        <IonLabel>Edit</IonLabel>
+                                        <IonLabel>Change Building</IonLabel>
                                     </IonButton>
                                 </IonItem>
-
-
+                                </IonList>
                             </IonCard>
                         </IonCol>
                     </IonRow>

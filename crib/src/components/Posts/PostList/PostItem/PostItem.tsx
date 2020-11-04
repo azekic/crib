@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { IonCard, IonCardHeader, IonCardContent, IonItem, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonText, IonModal, IonHeader, IonToolbar, IonButtons, IonContent, IonCardSubtitle } from '@ionic/react';
 import { thumbsUp, chatboxEllipses, ellipsisHorizontal, arrowBack } from 'ionicons/icons';
-import UserAvatar from '../../../UserAvatar';
+import UserAvatar from '../../../User/UserAvatar';
 import AuthContext from '../../../../context/auth-context';
 // import Truncate from 'react-truncate';
 import './PostItem.css';

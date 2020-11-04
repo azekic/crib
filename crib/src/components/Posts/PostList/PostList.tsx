@@ -14,7 +14,7 @@ const PostList = ({ posts }: PostListProps) => {
                 postId={post._id}
                 userId={post.author._id}
                 name={post.author.firstName + " " + post.author.lastName}
-                unit="221"
+                unit={localStorage.getItem("unit") != null ? "Unit " + localStorage.getItem("unit") : "No Unit"}
                 likes={post.likes}
                 comments={post.comments}
                 text={post.body}

@@ -8,10 +8,8 @@ const toggleDarkModeHandler = () => {
   document.body.classList.toggle("dark");
 };
 const contentStyle = isPlatform("desktop") ? undefined : "mobile-content";
-
 const Account: React.FC = () => {
-const { logout } = useContext(AuthContext);
-
+  const { logout } = useContext(AuthContext);
   return (
     <IonPage>
       <IonContent className={contentStyle}>
@@ -26,25 +24,25 @@ const { logout } = useContext(AuthContext);
                   <IonItem lines="none">
                     <IonLabel>
                       <h3>Name</h3>
-                      <h2><b>Andre Zekic</b></h2>
+                      <h2><b>{localStorage.getItem("firstName") + " " + localStorage.getItem("lastName")}</b></h2>
                     </IonLabel>
                   </IonItem>
                   <IonItem lines="none">
                     <IonLabel>
                       <h3>Email</h3>
-                      <h2><b>andrezekic@me.com</b></h2>
+                      <h2><b>{localStorage.getItem("email")}</b></h2>
                     </IonLabel>
                   </IonItem>
                   <IonItem lines="none">
                     <IonLabel>
                       <h3>Unit Number</h3>
-                      <h2><b>Unit 123</b></h2>
+                      <h2><b>{localStorage.getItem("unit") != null ? "Unit " + localStorage.getItem("unit") : "No Unit"}</b></h2>
                     </IonLabel>
                   </IonItem>
                   <IonItem lines="none">
                     <IonLabel>
                       <h3>Building</h3>
-                      <h2><b>15 Jacksway Cres</b></h2>
+                      <h2><b>{localStorage.getItem("building")}</b></h2>
                     </IonLabel>
                   </IonItem>
                   <IonItem lines="none">
@@ -75,11 +73,7 @@ const { logout } = useContext(AuthContext);
                 className="margin-horizontal"
                 expand="block"
                 onClick={() => {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("userId");
-                  localStorage.removeItem("firstName");
-                  localStorage.removeItem("lastName");
-                  localStorage.removeItem("profilePicture");
+                  localStorage.clear();
                   logout();
                 }}
               >

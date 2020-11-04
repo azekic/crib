@@ -50,7 +50,7 @@ const Home: React.FC = () => {
         </IonHeader>
         <IonContent fullscreen>
           <PostCreator
-            unit="221"
+            unit={localStorage.getItem("unit") != null ? "Unit " + localStorage.getItem("unit") : "No Unit"}
             onSubmitAction={setShowCreatePostModal}
             newPhotos={photos}
           />
@@ -71,7 +71,7 @@ const Home: React.FC = () => {
                 <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => console.log("videocam clicked")}>
                   <IonIcon slot="icon-only" icon={videocam} />
                 </IonButton> */}
-                <IonButton className="ion-float-right" fill="clear" color="medium" onClick={() => cameraHandler()}>
+                <IonButton class="ion-float-right" fill="clear" color="medium" onClick={() => cameraHandler()}>
                   <IonIcon slot="icon-only" icon={camera} />
                 </IonButton>
               </IonCard>

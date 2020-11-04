@@ -14,7 +14,7 @@ const UserAvatar = ({ name, unit, profilePicture }: PostProps) => {
             </IonAvatar>
             <IonLabel>
                 <h2><b>{name}</b></h2>
-                <h3>Unit {unit}</h3>
+                <h3>{unit}</h3>
             </IonLabel>
         </React.Fragment>
     );

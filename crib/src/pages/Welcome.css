@@ -55,6 +55,10 @@
   justify-content: space-around;
 }
 
+.pointer-cursor {
+  cursor: pointer;
+}
+
 ion-card {
   flex: 0 1 293px;
 }

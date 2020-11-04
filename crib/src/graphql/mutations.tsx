@@ -66,3 +66,38 @@ export const CREATE_USER = gql`
         }
     }
 `;
+
+export const UPDATE_PROFILE_PICTURE = gql`
+mutation UpdateProfilePicture($profilePicture: String!){
+    updateProfilePicture(updateProfilePictureInput: {profilePicture: $profilePicture}) {
+        profilePicture
+    }
+}
+`;
+
+export const ADD_UNIT = gql`
+mutation AddUnit($buildingId: ID!, $unitNumber: Int!){
+  addUnit(unitInput: {buildingId: $buildingId, unitNumber: $unitNumber}) {
+    unitNumber
+  }
+}
+`;
+
+export const ADD_BUILDING = gql`
+mutation AddBuilding($address: String!, $city: String!, $province: String!){
+  addBuilding(buildingInput: {address: $address, city: $city, province: $province}) {
+    _id
+  }
+}
+`;
+
+export const SET_BUILDING = gql`
+mutation SetBuilding($buildingId: ID!){
+  setBuilding(buildingId: $buildingId) {
+    building {
+      _id
+      address
+    }
+  }
+}
+`

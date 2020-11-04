@@ -15,15 +15,17 @@ import {
   IonButton,
   IonTitle,
   IonText,
-  IonModal
+  IonModal,
+  IonBadge
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { 
+import {
   //chatbubblesOutline, 
-  personOutline, 
+  personOutline,
   //homeOutline, 
   //newspaperOutline, 
-  albumsOutline 
+  albumsOutline,
+  notificationsOutline
 } from 'ionicons/icons';
 import Home from './pages/Home';
 import Account from './pages/Account';
@@ -51,6 +53,7 @@ import News from './pages/News';
 import MyCondo from './pages/MyCondo';
 import EditUser from './pages/EditUser';
 import ChangeBuilding from './pages/ChangeBuilding';
+import ChangeUnit from './pages/ChangeUnit';
 
 import AuthContext from './context/auth-context';
 import Welcome from './pages/Welcome';
@@ -59,6 +62,7 @@ import Register from './pages/Register';
 import Auth from './pages/Auth';
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import Notifications from './pages/Notifications';
 
 const client = new ApolloClient({
   uri: 'http://localhost:8000/graphql',
@@ -86,17 +90,15 @@ const App = () => {
 
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-
-
   const [tabsState] =
     useState<{
       tabsPlacement: "top" | "bottom" | undefined
-      tabsLayout: "icon-top" | "icon-start" | "icon-end" | "icon-bottom" | "icon-hide" | "label-hide" | undefined
       tabsStyle: string | undefined
+      notificationStyle: string | undefined
     }>(isPlatform("desktop") ? {
-      tabsPlacement: "top", tabsLayout: "icon-start", tabsStyle: "tab-desktop"
+      tabsPlacement: "top", tabsStyle: "tab-desktop", notificationStyle: "ion-margin-start"
     } : {
-        tabsPlacement: "bottom", tabsLayout: undefined, tabsStyle: undefined
+        tabsPlacement: "bottom", tabsStyle: undefined, notificationStyle: undefined
       }
     );
 
@@ -133,7 +135,11 @@ const App = () => {
                   //   <IonIcon slot="icon-only" icon={chatbubblesOutline} />
 
                   // </IonButton>
-                  <IonButton onClick={() => logout()} color='medium'>Logout</IonButton>
+                    <IonButton onClick={() => {
+                      localStorage.clear();
+                      logout();
+                    }
+                    } color='medium'>Logout</IonButton>
                   :
                   <React.Fragment>
                     <IonButton onClick={() => setShowLoginModal(true)} color='medium'>Login</IonButton>
@@ -161,28 +167,38 @@ const App = () => {
                   {/* <Route path="/news" component={News} exact={true} />
                   <Route path="/mycondo" component={MyCondo} exact={true} /> */}
                   <Route path="/account" component={Account} exact={true} />
-                  <Route path="/messages" component={Messages} exact={true} />
+                  <Route path="/notifications" component={Notifications} expact={true} />
+                  {/* <Route path="/messages" component={Messages} exact={true} /> */}
                   <Route path="/account/edit" component={EditUser} exact={true} />
                   <Route path="/account/edit/building" component={ChangeBuilding} exact={true} />
+                  <Route path="/account/edit/unit" component={ChangeUnit} expact={true} />
                 </IonRouterOutlet>
 
                 <IonTabBar slot={tabsState.tabsPlacement} className={tabsState.tabsStyle}>
-                  <IonTabButton tab="home" href="/home" layout={tabsState.tabsLayout}>
+                  <IonTabButton tab="home" href="/home">
                     <IonIcon icon={albumsOutline} />
                     <IonLabel>Posts</IonLabel>
                   </IonTabButton>
-                  {/* <IonTabButton tab="news" href="/news" layout={tabsState.tabsLayout}>
+                  {/* <IonTabButton tab="news" href="/news">
                     <IonIcon icon={newspaperOutline} />
                     <IonLabel>News</IonLabel>
                   </IonTabButton>
-                  <IonTabButton tab="messages" href="/mycondo" layout={tabsState.tabsLayout}>
+                  <IonTabButton tab="messages" href="/mycondo">
                     <IonIcon icon={homeOutline} />
                     <IonLabel>My Condo</IonLabel>
                   </IonTabButton> */}
-                  <IonTabButton tab="account" href="/account" layout={tabsState.tabsLayout}>
+                  <IonTabButton tab="account" href="/account">
                     <IonIcon icon={personOutline} />
                     <IonLabel>Account</IonLabel>
                   </IonTabButton>
+                  <IonTabButton tab="notifications" href="/notifications">
+                    <IonIcon icon={notificationsOutline} />
+                    <IonLabel>Notications</IonLabel>
+                    {localStorage.getItem("unit") == null &&
+                      <IonBadge color="danger">1</IonBadge>
+                    }
+                  </IonTabButton>
+                  
                 </IonTabBar>
 
               </IonTabs>

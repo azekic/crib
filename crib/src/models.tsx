@@ -27,3 +27,10 @@ export interface Like {
   user: User,
   post: Post
 }
+
+export interface Building {
+  _id: string,
+  address: string,
+  city: string,
+  province: string
+}

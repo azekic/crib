@@ -8,11 +8,32 @@ query Login($email: String!, $password: String!){
         firstName
         lastName
         profilePicture
+        email
+        unit {
+            unitNumber
+        }
+        building {
+          _id
+          address
+          city
+          province
+        }
     }
     token
   }
 }
 `;
+
+export const GET_BUILDINGS = gql`
+query GetBuildings {
+  buildings {
+    _id
+    address
+    city
+    province
+  }
+}
+`
 
 export const GET_POSTS = gql`
 query GetPosts {

@@ -15,18 +15,23 @@ const Login = ({ setTitle }: LoginProps) => {
   const { login } = useContext(AuthContext);
 
   const [loginUser, { data, error }] = useLazyQuery(LOGIN_USER);
-
+  
   useEffect(() => {
     if (data && data.login) {
       login(
         data.login.token,
         data.login.user._id,
       );
+
       localStorage.setItem("token", data.login.token);
       localStorage.setItem("userId", data.login.user._id);
       localStorage.setItem("firstName", data.login.user.firstName);
       localStorage.setItem("lastName", data.login.user.lastName);
+      localStorage.setItem("email", data.login.user.email);
       localStorage.setItem("profilePicture", data.login.user.profilePicture ?? './img/default-user.png');
+      localStorage.setItem("building", data.login.user.building.address);
+      localStorage.setItem("buildingId", data.login.user.building._id);
+      localStorage.setItem("unit", data.login.user.unit.unitNumber);
     }
   });
 
